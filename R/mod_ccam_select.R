@@ -37,7 +37,9 @@ mod_ccam_select_ui <- function(id) {
 #' ccam_select Server Functions
 #'
 #' @noRd
-mod_ccam_select_server <- function(id, con, rv, limit = 50) {
+#' @importFrom dplyr collect filter %>% select
+#'
+mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 50) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
@@ -78,6 +80,10 @@ mod_ccam_select_server <- function(id, con, rv, limit = 50) {
 
     observeEvent(input$ccam, {
       rv$ccam <- unique(c(rv$ccam, input$ccam))
+      rv$filtered_table <- csv_duckdb %>%
+        select(COD_ACTE, NOM_COURT) %>%
+        filter(COD_ACTE %in% rv$ccam) %>%
+        collect()
     })
 
     # Gestion du bouton "Select All"

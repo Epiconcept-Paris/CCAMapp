@@ -3,6 +3,7 @@
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @importFrom DT DTOutput
 #' @noRd
 app_ui <- function(request) {
   tagList(
@@ -12,7 +13,8 @@ app_ui <- function(request) {
     fluidPage(
       fluidRow(
         column(6, mod_ccam_select_ui("ccam1")),
-        column(6, verbatimTextOutput("out"))
+        column(6, DTOutput("out")),
+        column(6, actionButton("erase_selection", "Effacer la sélection"))
       )
     ),
   )

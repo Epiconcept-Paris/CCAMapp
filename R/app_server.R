@@ -3,6 +3,7 @@
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @importFrom DT renderDT
 #' @noRd
 app_server <- function(input, output, session) {
   # Your application server logic
@@ -21,13 +22,28 @@ app_server <- function(input, output, session) {
 "
   )
 
-  rv <- reactiveValues(
-    ccam = NULL
+  csv_duckdb <- duckplyr::read_csv_duckdb(
+    "inst/referentiel_actes.csv",
+    options = list(ignore_errors = FALSE)
   )
 
-  selected <- mod_ccam_select_server("ccam1", con, rv)
+  rv <- reactiveValues(
+    ccam = NULL,
+    filtered_table = NULL
+  )
 
-  output$out <- renderPrint({
-    rv$ccam
+  selected <- mod_ccam_select_server("ccam1", con, rv, csv_duckdb)
+
+  output$out <- renderDT({
+    req(rv$filtered_table)
+    DT::datatable(
+      rv$filtered_table,
+      options = list(pageLength = 10, lengthChange = FALSE)
+    )
+  })
+
+  observeEvent(input$erase_selection, {
+    rv$ccam <- NULL
+    rv$filtered_table <- NULL
   })
 }
