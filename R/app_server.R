@@ -3,13 +3,12 @@
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @import duckplyr
+#' @import DBI
 #' @importFrom DT renderDT
 #' @noRd
 app_server <- function(input, output, session) {
   # Your application server logic
-  library(shiny)
-  library(DBI)
-  library(duckdb)
 
   # Chargement de DuckDB + CSV (sans mise en RAM)
   con <- dbConnect(duckdb::duckdb())
@@ -27,12 +26,17 @@ app_server <- function(input, output, session) {
     options = list(ignore_errors = FALSE)
   )
 
+  csv_open_ccam <- duckplyr::read_csv_duckdb(
+    "inst/open_ccam/open_ccam_24.csv",
+    options = list(ignore_errors = FALSE)
+  )
+
   rv <- reactiveValues(
     ccam = NULL,
     filtered_table = NULL
   )
 
-  selected <- mod_ccam_select_server("ccam1", con, rv, csv_duckdb)
+  mod_ccam_select_server("ccam1", con, rv, csv_duckdb)
 
   output$out <- renderDT({
     req(rv$filtered_table)
@@ -46,4 +50,6 @@ app_server <- function(input, output, session) {
     rv$ccam <- NULL
     rv$filtered_table <- NULL
   })
+
+  mod_filter_open_ccam_server("filter_open_ccam_1", rv, csv_open_ccam)
 }
