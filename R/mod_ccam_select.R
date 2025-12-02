@@ -44,18 +44,19 @@ mod_ccam_select_server <- function(id, con, rv, limit = 100){
 
       q <- paste0("%", search_term(), "%")
 
+
       res <- DBI::dbGetQuery(
         con,
         sprintf("
-          SELECT COD_ACTE AS code
+          SELECT COD_ACTE AS code, NOM_COURT AS lib
           FROM ccam
-          WHERE COD_ACTE ILIKE ?
+          WHERE COD_ACTE ILIKE ? OR NOM_COURT ILIKE ?
           LIMIT %d
         ", limit),
-        params = list(q)
+        params = list(q, q)
       )
 
-      choices <- setNames(res$code, paste(res$code))
+      choices <- setNames(res$code, paste(res$code, "-", res$lib))
 
       updateSelectizeInput(
         session,
