@@ -33,7 +33,7 @@ mod_ccam_select_ui <- function(id) {
 #' ccam_select Server Functions
 #'
 #' @noRd 
-mod_ccam_select_server <- function(id, con){
+mod_ccam_select_server <- function(id, con, rv, limit = 100){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
@@ -44,7 +44,6 @@ mod_ccam_select_server <- function(id, con){
 
       q <- paste0("%", search_term(), "%")
 
-
       res <- DBI::dbGetQuery(
         con,
         sprintf("
@@ -52,7 +51,7 @@ mod_ccam_select_server <- function(id, con){
           FROM ccam
           WHERE COD_ACTE ILIKE ?
           LIMIT %d
-        ", 50),
+        ", limit),
         params = list(q)
       )
 
@@ -66,10 +65,9 @@ mod_ccam_select_server <- function(id, con){
       )
     })
 
-    # Valeur retournée par le module
-    return(
-      reactive(input$ccam)   # vecteur des codes CCAM sélectionnés
-    )
+    observeEvent(input$ccam, {
+      rv$ccam <- unique(c(rv$ccam, input$ccam))
+    })
  
   })
 }

@@ -6,7 +6,7 @@
 #' @noRd
 app_server <- function(input, output, session) {
   # Your application server logic
-  library(shiny)
+library(shiny)
 library(DBI)
 library(duckdb)
 
@@ -18,9 +18,13 @@ dbExecute(con, "
   SELECT * FROM read_csv_auto('inst/referentiel_actes.csv');
 ")
 
-  selected <- mod_ccam_select_server("ccam1", con)
+rv <- reactiveValues(
+  ccam = NULL
+)
+
+  selected <- mod_ccam_select_server("ccam1", con, rv)
 
   output$out <- renderPrint({
-    selected()
+    rv$ccam
   })
 }
