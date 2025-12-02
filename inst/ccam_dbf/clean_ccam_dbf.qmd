@@ -1,0 +1,24 @@
+---
+title: "Untitled"
+format: html
+---
+
+
+```{r}
+library(foreign)
+library(data.table)
+```
+
+# download dbf part 1 here https://www.ameli.fr/accueil-de-la-ccam/telechargement/index.php
+
+```{r}
+referentiel_actes_dbf <- read.dbf("inst/ccam_dbf/R_ACTE.dbf")
+referentiel_actes_dt <- as.data.table(referentiel_actes_dbf)
+variables_to_keep <- c("COD_ACTE", "DT_MODIF", "NOM_LONG")
+referentiel_actes_dt <- referentiel_actes_dt[, ..variables_to_keep]
+
+referentiel_actes_dt <- referentiel_actes_dt[order(DT_MODIF, decreasing = TRUE), .SD, by = COD_ACTE]
+
+referentiel_actes_dt <- referentiel_actes_dt[, .SD[1], by = COD_ACTE]
+fwrite(referentiel_actes_dt, "inst/referentiel_actes.csv")
+```
