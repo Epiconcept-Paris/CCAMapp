@@ -16,20 +16,24 @@ mod_ccam_select_ui <- function(id) {
       label = "Recherche (code ou libellé)",
       placeholder = "Ex : radio, AAQP…"
     ),
+    div(
+      id = ns("ccam_container"),
+      style = "display: none;",
+      selectizeInput(
+        inputId = ns("ccam"),
+        label = "CCAM (max 25 résultats)",
+        choices = NULL,
+        multiple = TRUE,
+        options = list(
+          maxOptions = 25,
+          closeAfterSelect = FALSE
+        )
+      ),
 
-    selectizeInput(
-      inputId = ns("ccam"),
-      label = "CCAM (max 25 résultats)",
-      choices = NULL,
-      multiple = TRUE,
-      options = list(
-        maxOptions = 25,
-        closeAfterSelect = FALSE
+      actionButton(
+        inputId = ns("select_all"),
+        label = "Sélectionner tous les résultats proposés"
       )
-    ),
-    actionButton(
-      inputId = ns("select_all"),
-      label = "Sélectionner tous les résultats proposés"
     )
   )
 }
@@ -50,6 +54,8 @@ mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 25) {
 
     observeEvent(search_term(), {
       req(nchar(search_term()) >= 2)
+
+      golem::invoke_js("hideid", ns("ccam_container"))
 
       q <- paste0("%", search_term(), "%")
 
@@ -76,6 +82,8 @@ mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 25) {
         choices = choices,
         server = TRUE
       )
+
+      golem::invoke_js("showid", ns("ccam_container"))
     })
 
     observeEvent(input$ccam, {

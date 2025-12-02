@@ -4,28 +4,27 @@
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
-#' @noRd 
+#' @noRd
 #'
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList
 mod_maps_ui <- function(id) {
   ns <- NS(id)
   tagList(
-   textOutput(ns("nombre_d_etablissements")),
+    textOutput(ns("nombre_d_etablissements")),
     fluidRow(
       column(6, maplibreOutput(ns("map"))),
       column(6, maplibreOutput(ns("map_by_dept")))
     )
   )
 }
-    
+
 #' maps Server Functions
 #'
-#' @noRd 
-mod_maps_server <- function(id, rv, dept_sf){
-  moduleServer(id, function(input, output, session){
+#' @noRd
+mod_maps_server <- function(id, rv, dept_sf) {
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    
     output$nombre_d_etablissements <- renderText({
       req(rv$swm_etablissements_with_selected_ccam)
       paste0(
@@ -104,12 +103,11 @@ mod_maps_server <- function(id, rv, dept_sf){
           )
         )
     })
- 
   })
 }
-    
+
 ## To be copied in the UI
 # mod_maps_ui("maps_1")
-    
+
 ## To be copied in the server
 # mod_maps_server("maps_1", rv, dept_sf)
