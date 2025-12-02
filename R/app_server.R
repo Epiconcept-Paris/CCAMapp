@@ -4,6 +4,7 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import duckplyr
+#' @importFrom duckdb duckdb
 #' @import DBI
 #' @import sf
 #' @importFrom DT renderDT

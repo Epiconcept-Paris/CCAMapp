@@ -11,6 +11,7 @@ Imports:
     DBI,
     dplyr,
     DT,
+    duckdb,
     duckplyr,
     golem,
     janitor,
