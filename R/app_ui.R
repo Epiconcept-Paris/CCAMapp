@@ -10,8 +10,12 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      golem::golem_welcome_page() # Remove this line to start building your UI
+   
+    fluidRow(
+      column(6, mod_ccam_select_ui("ccam1")),
+      column(6, verbatimTextOutput("out"))
     )
+     ),
   )
 }
 

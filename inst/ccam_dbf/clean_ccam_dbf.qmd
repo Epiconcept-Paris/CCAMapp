@@ -14,11 +14,23 @@ library(data.table)
 ```{r}
 referentiel_actes_dbf <- read.dbf("inst/ccam_dbf/R_ACTE.dbf")
 referentiel_actes_dt <- as.data.table(referentiel_actes_dbf)
-variables_to_keep <- c("COD_ACTE", "DT_MODIF", "NOM_LONG")
+variables_to_keep <- c("COD_ACTE", "DT_MODIF", "NOM_COURT")
 referentiel_actes_dt <- referentiel_actes_dt[, ..variables_to_keep]
 
 referentiel_actes_dt <- referentiel_actes_dt[order(DT_MODIF, decreasing = TRUE), .SD, by = COD_ACTE]
 
 referentiel_actes_dt <- referentiel_actes_dt[, .SD[1], by = COD_ACTE]
-fwrite(referentiel_actes_dt, "inst/referentiel_actes.csv")
+
+referentiel_actes_dt <- referentiel_actes_dt[, .(COD_ACTE)]
+
+# Write to DuckDB file
+library(DBI)
+library(duckdb)
+
+con <- dbConnect(duckdb::duckdb(), "inst/referentiel_actes.duckdb")
+dbWriteTable(con, "referentiel_actes", referentiel_actes_dt, overwrite = TRUE)
+dbDisconnect(con)
+
+
+fwrite(referentiel_actes_dt, "inst/referentiel_actes.csv", encoding = "UTF-8")
 ```
