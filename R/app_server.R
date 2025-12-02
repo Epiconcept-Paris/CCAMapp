@@ -24,17 +24,17 @@ app_server <- function(input, output, session) {
   )
 
   csv_duckdb <- duckplyr::read_csv_duckdb(
-    "inst/referentiel_actes.csv",
+    system.file("referentiel_actes.csv", package = "CCAMapp"),
     options = list(ignore_errors = FALSE)
   )
 
   csv_open_ccam <- duckplyr::read_csv_duckdb(
-    "inst/open_ccam/open_ccam_24.csv",
+    system.file("open_ccam/open_ccam_24.csv", package = "CCAMapp"),
     options = list(ignore_errors = FALSE)
   )
 
   dept_sf <- sf::read_sf(
-    "inst/departements.geojson"
+    system.file("departements.geojson", package = "CCAMapp")
   ) %>%
     sf::st_transform(4326)
 
