@@ -3,6 +3,7 @@
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @importFrom DT DTOutput
 #' @noRd
 app_ui <- function(request) {
   tagList(
@@ -10,8 +11,12 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      golem::golem_welcome_page() # Remove this line to start building your UI
-    )
+      fluidRow(
+        column(6, mod_ccam_select_ui("ccam1")),
+        column(6, DTOutput("out")),
+        column(6, actionButton("erase_selection", "Effacer la sélection"))
+      )
+    ),
   )
 }
 
