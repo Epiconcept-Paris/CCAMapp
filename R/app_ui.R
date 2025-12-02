@@ -3,6 +3,7 @@
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @importFrom shinyjs useShinyjs
 #' @noRd
 app_ui <- function(request) {
   tagList(
@@ -10,7 +11,18 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      golem::golem_welcome_page() # Remove this line to start building your UI
+      titlePanel("Visualisation des actes CCAM"),
+      sidebarLayout(
+        sidebarPanel(
+          mod_acte_search_ui("acte_search_1"),
+          width = 4
+        ),
+        mainPanel(
+          h3("Résultats"),
+          p("Sélectionnez des actes CCAM dans le panneau de gauche pour voir les visualisations."),
+          width = 8
+        )
+      )
     )
   )
 }
