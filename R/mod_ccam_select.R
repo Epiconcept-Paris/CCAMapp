@@ -4,11 +4,11 @@
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
-#' @noRd 
+#' @noRd
 #'
-#' @importFrom shiny NS tagList textInput selectizeInput actionButton debounce reactive observeEvent updateSelectizeInput moduleServer reactiveVal 
+#' @importFrom shiny NS tagList textInput selectizeInput actionButton debounce reactive observeEvent updateSelectizeInput moduleServer reactiveVal
 mod_ccam_select_ui <- function(id) {
-   ns <- NS(id)
+  ns <- NS(id)
 
   tagList(
     textInput(
@@ -33,12 +33,12 @@ mod_ccam_select_ui <- function(id) {
     )
   )
 }
-    
+
 #' ccam_select Server Functions
 #'
-#' @noRd 
-mod_ccam_select_server <- function(id, con, rv, limit = 50){
-  moduleServer(id, function(input, output, session){
+#' @noRd
+mod_ccam_select_server <- function(id, con, rv, limit = 50) {
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
     # Variable réactive pour stocker les choix disponibles
@@ -51,15 +51,17 @@ mod_ccam_select_server <- function(id, con, rv, limit = 50){
 
       q <- paste0("%", search_term(), "%")
 
-
       res <- DBI::dbGetQuery(
         con,
-        sprintf("
+        sprintf(
+          "
           SELECT COD_ACTE AS code, NOM_COURT AS lib
           FROM ccam
           WHERE COD_ACTE ILIKE ? OR NOM_COURT ILIKE ?
           LIMIT %d
-        ", limit),
+        ",
+          limit
+        ),
         params = list(q, q)
       )
 
@@ -82,7 +84,6 @@ mod_ccam_select_server <- function(id, con, rv, limit = 50){
     observeEvent(input$select_all, {
       choices <- current_choices()
       if (!is.null(choices) && length(choices) > 0) {
-        # Sélectionner tout
         updateSelectizeInput(
           session,
           "ccam",
@@ -90,12 +91,11 @@ mod_ccam_select_server <- function(id, con, rv, limit = 50){
         )
       }
     })
- 
   })
 }
-    
+
 ## To be copied in the UI
 # mod_ccam_select_ui("ccam_select_1")
-    
+
 ## To be copied in the server
 # mod_ccam_select_server("ccam_select_1")
