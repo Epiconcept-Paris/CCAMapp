@@ -32,10 +32,10 @@ app_server <- function(input, output, session) {
     options = list(ignore_errors = FALSE)
   )
 
-      dept_sf <- sf::read_sf(
-        "inst/departements.geojson"
-      ) %>%
-        sf::st_transform(4326)
+  dept_sf <- sf::read_sf(
+    "inst/departements.geojson"
+  ) %>%
+    sf::st_transform(4326)
 
   rv <- reactiveValues(
     ccam = NULL,
@@ -57,5 +57,6 @@ app_server <- function(input, output, session) {
     rv$filtered_table <- NULL
   })
 
-  mod_filter_open_ccam_server("filter_open_ccam_1", rv, csv_open_ccam)
+  mod_filter_open_ccam_server("filter_open_ccam_1", rv, csv_open_ccam, dept_sf)
+  mod_maps_server("maps_1", rv, dept_sf)
 }

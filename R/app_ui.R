@@ -18,6 +18,9 @@ app_ui <- function(request) {
       ),
       fluidRow(
         column(6, mod_filter_open_ccam_ui("filter_open_ccam_1"))
+      ),
+      fluidRow(
+        mod_maps_ui("maps_1")
       )
     ),
   )

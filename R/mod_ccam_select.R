@@ -19,11 +19,11 @@ mod_ccam_select_ui <- function(id) {
 
     selectizeInput(
       inputId = ns("ccam"),
-      label = "CCAM (max 50 résultats)",
+      label = "CCAM (max 25 résultats)",
       choices = NULL,
       multiple = TRUE,
       options = list(
-        maxOptions = 50,
+        maxOptions = 25,
         closeAfterSelect = FALSE
       )
     ),
@@ -39,7 +39,7 @@ mod_ccam_select_ui <- function(id) {
 #' @noRd
 #' @importFrom dplyr collect filter %>% select
 #'
-mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 50) {
+mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 25) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
