@@ -5,6 +5,7 @@
 #' @import shiny
 #' @import duckplyr
 #' @import DBI
+#' @import sf
 #' @importFrom DT renderDT
 #' @noRd
 app_server <- function(input, output, session) {
@@ -30,6 +31,11 @@ app_server <- function(input, output, session) {
     "inst/open_ccam/open_ccam_24.csv",
     options = list(ignore_errors = FALSE)
   )
+
+      dept_sf <- sf::read_sf(
+        "inst/departements.geojson"
+      ) %>%
+        sf::st_transform(4326)
 
   rv <- reactiveValues(
     ccam = NULL,

@@ -4,31 +4,32 @@
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
-#' @noRd 
+#' @noRd
 #'
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList
 mod_filter_open_ccam_ui <- function(id) {
   ns <- NS(id)
   tagList(
     h2("Table Open CCAM filtrée par les CCAM sélectionnés"),
     DTOutput(ns("filtered_open_ccam"))
-    
   )
 }
-    
+
 #' filter_open_ccam Server Functions
 #'
-#' @noRd 
-mod_filter_open_ccam_server <- function(id, rv, csv_open_ccam){
-  moduleServer(id, function(input, output, session){
+#' @noRd
+mod_filter_open_ccam_server <- function(id, rv, csv_open_ccam) {
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
     local_rv <- reactiveValues(
       filtered_open_ccam = NULL
     )
     observeEvent(rv$ccam, {
       local_rv$filtered_open_ccam <- csv_open_ccam %>%
-        filter(acte %in% paste0(rv$ccam , "0")) %>%
+        filter(acte %in% paste0(rv$ccam, "0")) %>%
         collect()
+
+        rv$swm_etablissements_with_selected_ccam <- inner_join(swm_cleaned_by_finess_sf, local_rv$filtered_open_ccam, by = c("finess_geographique" = "finessgeo"))
     })
 
     output$filtered_open_ccam <- DT::renderDT({
