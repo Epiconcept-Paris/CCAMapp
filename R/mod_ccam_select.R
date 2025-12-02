@@ -6,7 +6,7 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList textInput selectizeInput actionButton debounce reactive observeEvent updateSelectizeInput moduleServer reactiveVal 
 mod_ccam_select_ui <- function(id) {
    ns <- NS(id)
 
@@ -19,13 +19,17 @@ mod_ccam_select_ui <- function(id) {
 
     selectizeInput(
       inputId = ns("ccam"),
-      label = "CCAM",
+      label = "CCAM (max 50 résultats)",
       choices = NULL,
-      multiple = TRUE,            # ← multi-sélection
+      multiple = TRUE,
       options = list(
         maxOptions = 50,
         closeAfterSelect = FALSE
       )
+    ),
+    actionButton(
+      inputId = ns("select_all"),
+      label = "Sélectionner tous les résultats proposés"
     )
   )
 }
@@ -33,11 +37,14 @@ mod_ccam_select_ui <- function(id) {
 #' ccam_select Server Functions
 #'
 #' @noRd 
-mod_ccam_select_server <- function(id, con, rv, limit = 100){
+mod_ccam_select_server <- function(id, con, rv, limit = 50){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
-     search_term <- debounce(reactive(input$search), 200)
+    # Variable réactive pour stocker les choix disponibles
+    current_choices <- reactiveVal(NULL)
+
+    search_term <- debounce(reactive(input$search), 200)
 
     observeEvent(search_term(), {
       req(nchar(search_term()) >= 2)
@@ -57,6 +64,7 @@ mod_ccam_select_server <- function(id, con, rv, limit = 100){
       )
 
       choices <- setNames(res$code, paste(res$code, "-", res$lib))
+      current_choices(choices)
 
       updateSelectizeInput(
         session,
@@ -68,6 +76,19 @@ mod_ccam_select_server <- function(id, con, rv, limit = 100){
 
     observeEvent(input$ccam, {
       rv$ccam <- unique(c(rv$ccam, input$ccam))
+    })
+
+    # Gestion du bouton "Select All"
+    observeEvent(input$select_all, {
+      choices <- current_choices()
+      if (!is.null(choices) && length(choices) > 0) {
+        # Sélectionner tout
+        updateSelectizeInput(
+          session,
+          "ccam",
+          selected = as.character(choices)
+        )
+      }
     })
  
   })
