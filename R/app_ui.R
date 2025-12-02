@@ -15,6 +15,12 @@ app_ui <- function(request) {
         column(6, mod_ccam_select_ui("ccam1")),
         column(6, DTOutput("out")),
         column(6, actionButton("erase_selection", "Effacer la sélection"))
+      ),
+      fluidRow(
+        column(6, mod_filter_open_ccam_ui("filter_open_ccam_1"))
+      ),
+      fluidRow(
+        mod_maps_ui("maps_1")
       )
     ),
   )
