@@ -9,3 +9,5 @@ $run_dev.*
 ^.here$
 ^LICENSE\.md$
 ^inst/ccam_dbf/R_ACTE.dbf
+^Dockerfile$
+^\.dockerignore$
