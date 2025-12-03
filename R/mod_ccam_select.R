@@ -122,19 +122,17 @@ mod_ccam_select_server <- function(
 
     observeEvent(rv$ccam, {
       rv$filtered_referentiel <- DBI::dbGetQuery(
-          con,
-          sprintf(
-            "
+        con,
+        sprintf(
+          "
             SELECT COD_ACTE, NOM_COURT
             FROM referentiel_actes
             WHERE COD_ACTE IN (?)
           "
-          ),
-          params = list(rv$ccam)
-        )
+        ),
+        params = list(rv$ccam)
+      )
     })
-      
-    
 
     # Gestion du bouton "Select All"
     observeEvent(input$select_all, {
