@@ -34,6 +34,12 @@ mod_ccam_select_ui <- function(id) {
         inputId = ns("select_all"),
         label = "Sélectionner tous les résultats proposés"
       )
+    ),
+    selectInput(
+      inputId = ns("select_ccam_theme"),
+      label = "Sélectionner des actes par thématique",
+      choices = NULL,
+      multiple = TRUE
     )
   )
 }
@@ -43,9 +49,33 @@ mod_ccam_select_ui <- function(id) {
 #' @noRd
 #' @importFrom dplyr collect filter %>% select
 #'
-mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 25) {
+mod_ccam_select_server <- function(
+  id,
+  con,
+  rv,
+  all_thematics_codes,
+  limit = 25
+) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    updateSelectInput(
+      session,
+      "select_ccam_theme",
+      choices = names(all_thematics_codes)
+    )
+
+    observeEvent(input$select_ccam_theme, {
+      req(input$select_ccam_theme)
+
+      index_thematique <- which(
+        names(all_thematics_codes) %in% input$select_ccam_theme
+      )
+
+      ccam_thematique <- unlist(all_thematics_codes[index_thematique])
+
+      rv$ccam <- unique(c(rv$ccam, ccam_thematique))
+    })
 
     # Variable réactive pour stocker les choix disponibles
     current_choices <- reactiveVal(NULL)
@@ -64,7 +94,7 @@ mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 25) {
         sprintf(
           "
           SELECT COD_ACTE AS code, NOM_COURT AS lib
-          FROM ccam
+          FROM referentiel_actes
           WHERE COD_ACTE ILIKE ? OR NOM_COURT ILIKE ?
           LIMIT %d
         ",
@@ -88,11 +118,23 @@ mod_ccam_select_server <- function(id, con, rv, csv_duckdb, limit = 25) {
 
     observeEvent(input$ccam, {
       rv$ccam <- unique(c(rv$ccam, input$ccam))
-      rv$filtered_table <- csv_duckdb %>%
-        select(COD_ACTE, NOM_COURT) %>%
-        filter(COD_ACTE %in% rv$ccam) %>%
-        collect()
     })
+
+    observeEvent(rv$ccam, {
+      rv$filtered_referentiel <- DBI::dbGetQuery(
+          con,
+          sprintf(
+            "
+            SELECT COD_ACTE, NOM_COURT
+            FROM referentiel_actes
+            WHERE COD_ACTE IN (?)
+          "
+          ),
+          params = list(rv$ccam)
+        )
+    })
+      
+    
 
     # Gestion du bouton "Select All"
     observeEvent(input$select_all, {
