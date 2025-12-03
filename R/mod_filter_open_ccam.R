@@ -25,19 +25,29 @@ mod_filter_open_ccam_ui <- function(id) {
 #' @noRd
 #' @import mapgl
 #' @importFrom dplyr inner_join select distinct
-mod_filter_open_ccam_server <- function(id, rv, csv_open_ccam, dept_sf) {
+mod_filter_open_ccam_server <- function(id, rv, con, dept_sf) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     local_rv <- reactiveValues(
       filtered_open_ccam = NULL
     )
     observeEvent(rv$ccam, {
-      local_rv$filtered_open_ccam <- csv_open_ccam %>%
-        filter(acte %in% paste0(rv$ccam, "0")) %>%
-        collect()
+      ccam_codes <- paste0(rv$ccam, "0")
+
+      local_rv$filtered_open_ccam <- DBI::dbGetQuery(
+        con,
+        sprintf(
+          "
+          SELECT *
+          FROM open_ccam
+          WHERE acte IN (?)
+        "
+        ),
+        params = list(ccam_codes)
+      )
 
       rv$swm_etablissements_with_selected_ccam <- inner_join(
-        swm_cleaned_by_finess_sf,
+        CCAMapp::swm_cleaned_by_finess_sf,
         select(local_rv$filtered_open_ccam, finessgeo),
         by = c("finess_geographique" = "finessgeo")
       ) %>%
