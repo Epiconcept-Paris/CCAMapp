@@ -1,22 +1,3 @@
-library(shiny)
-library(data.table)
-library(DBI)
-library(dplyr)
-library(DT)
-library(duckdb)
-library(duckplyr)
-library(mapgl)
-library(sf)
-library(tidyr)
-library(shinyjs)
-library(bslib)
-
-R_files <- list.files(here::here("R"), full.names = TRUE)
-for (file in R_files) {
-  source(file)
-}
-
-
 # Define UI for application that draws a histogram
 ui <- page_sidebar(
   useShinyjs(),
@@ -34,22 +15,8 @@ ui <- page_sidebar(
   )
 )
 
-#   fluidRow(
-#     column(6, mod_ccam_select_ui("ccam1")),
-#     column(6, DTOutput("out")),
-#     column(6, actionButton("erase_selection", "Effacer la sélection"))
-#   ),
-#   fluidRow(
-#     column(6, mod_filter_open_ccam_ui("filter_open_ccam_1"))
-#   ),
-#   fluidRow(
-#     mod_maps_ui("maps_1")
-#   )
-# )
-
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-  con <- dbConnect(duckdb::duckdb())
 
   referentiel_actes_csv_path <- file.path(
     here::here("external_data"),
@@ -60,27 +27,9 @@ server <- function(input, output, session) {
     "open_ccam/open_ccam_24.csv"
   )
 
-  dbExecute(
-    con,
-    sprintf(
-      "
-      CREATE TABLE referentiel_actes AS
-      SELECT * FROM read_csv_auto('%s');
-      ",
-      referentiel_actes_csv_path
-    )
-  )
+  referentiel_actes_csv <- data.table::fread(referentiel_actes_csv_path)
+  open_ccam_csv <- data.table::fread(open_ccam_csv_path)
 
-  dbExecute(
-    con,
-    sprintf(
-      "
-      CREATE TABLE open_ccam AS
-      SELECT * FROM read_csv_auto('%s');
-      ",
-      open_ccam_csv_path
-    )
-  )
 
   dept_sf <- sf::read_sf(
     here::here("external_data", "departements.geojson")
@@ -115,9 +64,9 @@ server <- function(input, output, session) {
       options = list(pageLength = 10, lengthChange = FALSE)
     )
   })
-  mod_ccam_select_server("ccam1", con, rv, all_thematics_codes)
+  mod_ccam_select_server("ccam1", referentiel_actes_csv, rv, all_thematics_codes)
 
-  mod_filter_open_ccam_server("filter_open_ccam_1", rv, con, dept_sf)
+  mod_filter_open_ccam_server("filter_open_ccam_1", rv, open_ccam_csv, dept_sf)
   mod_maps_server("maps_1", rv, dept_sf)
 }
 

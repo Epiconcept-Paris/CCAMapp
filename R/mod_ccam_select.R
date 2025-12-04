@@ -61,7 +61,7 @@ mod_ccam_select_ui <- function(id) {
 #'
 mod_ccam_select_server <- function(
   id,
-  con,
+  referentiel_actes_csv,
   rv,
   all_thematics_codes,
   limit = 25
@@ -104,23 +104,28 @@ mod_ccam_select_server <- function(
         paste0("#", ns("ccam_container"))
       ))
 
-      q <- paste0("%", search_term(), "%")
 
-      res <- DBI::dbGetQuery(
-        con,
-        sprintf(
-          "
-          SELECT COD_ACTE AS code, NOM_COURT AS lib
-          FROM referentiel_actes
-          WHERE COD_ACTE ILIKE ? OR NOM_COURT ILIKE ?
-          LIMIT %d
-        ",
-          limit
-        ),
-        params = list(q, q)
-      )
+      res <- referentiel_actes_csv[COD_ACTE %like% search_term() | NOM_COURT %like% search_term(), .(COD_ACTE, NOM_COURT)][1:limit]
+      res <- res[order(COD_ACTE)]
+      
 
-      choices <- setNames(res$code, paste(res$code, "-", res$lib))
+      # q <- paste0("%", search_term(), "%")
+
+      # res <- DBI::dbGetQuery(
+      #   con,
+      #   sprintf(
+      #     "
+      #     SELECT COD_ACTE AS code, NOM_COURT AS lib
+      #     FROM referentiel_actes
+      #     WHERE COD_ACTE ILIKE ? OR NOM_COURT ILIKE ?
+      #     LIMIT %d
+      #   ",
+      #     limit
+      #   ),
+      #   params = list(q, q)
+      # )
+
+      choices <- setNames(res$COD_ACTE, paste(res$COD_ACTE, "-", res$NOM_COURT))
       current_choices(choices)
 
       updateSelectizeInput(
@@ -137,7 +142,7 @@ mod_ccam_select_server <- function(
     })
 
     observeEvent(input$ccam, {
-      local_rv$ccam <- input$ccam
+      local_rv$ccam <- c(local_rv$ccam, input$ccam)
     })
 
     observeEvent(c(local_rv$ccam, local_rv$ccam_thematique), {
@@ -145,17 +150,18 @@ mod_ccam_select_server <- function(
     })
 
     observeEvent(rv$ccam, {
-      rv$filtered_referentiel <- DBI::dbGetQuery(
-        con,
-        sprintf(
-          "
-            SELECT COD_ACTE, NOM_COURT
-            FROM referentiel_actes
-            WHERE COD_ACTE IN (?)
-          "
-        ),
-        params = list(rv$ccam)
-      )
+      rv$filtered_referentiel <- referentiel_actes_csv[COD_ACTE %in% rv$ccam, .(COD_ACTE, NOM_COURT)]
+      # rv$filtered_referentiel <- DBI::dbGetQuery(
+      #   con,
+      #   sprintf(
+      #     "
+      #       SELECT COD_ACTE, NOM_COURT
+      #       FROM referentiel_actes
+      #       WHERE COD_ACTE IN (?)
+      #     "
+      #   ),
+      #   params = list(rv$ccam)
+      # )
     })
 
     # Gestion du bouton "Select All"
