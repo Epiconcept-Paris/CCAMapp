@@ -1,3 +1,4 @@
+cat("Loading global.R\n")
 library(shiny)
 library(data.table)
 library(dplyr)
@@ -7,3 +8,4 @@ library(sf)
 library(shinyjs)
 library(bslib)
 library(tidyr)
+

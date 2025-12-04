@@ -20,7 +20,7 @@ mod_filter_open_ccam_ui <- function(id) {
 #' @noRd
 #' @import mapgl
 #' @importFrom dplyr inner_join select distinct
-mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, dept_sf) {
+mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, swm_sf) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     local_rv <- reactiveValues(
@@ -32,9 +32,28 @@ mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, dept_sf) {
 
       local_rv$filtered_open_ccam <- open_ccam_csv[acte %in% ccam_codes]
 
+      all(local_rv$filtered_open_ccam$acte %in% ccam_codes)
+
+      rv$stats_nationales_selected_ccam <- local_rv$filtered_open_ccam[,
+        .(
+          n_etablissements = uniqueN(finessgeo),
+          total_nb_actes = sum(nb_actes, na.rm = TRUE)
+        ),
+        by = dep
+      ]
+
+      rv$stats_swm_selected_ccam <- local_rv$filtered_open_ccam[
+        finessgeo %in% swm_sf$finess_geographique,
+        .(
+          n_etablissements = uniqueN(finessgeo),
+          total_nb_actes = sum(nb_actes, na.rm = TRUE)
+        ),
+        by = dep
+      ]
+
       rv$swm_etablissements_with_selected_ccam <- inner_join(
-        readRDS(file.path(here::here("data"), "swm_cleaned_by_finess_sf.rds")),
-        select(local_rv$filtered_open_ccam, finessgeo),
+        swm_sf,
+        distinct(select(local_rv$filtered_open_ccam, finessgeo)),
         by = c("finess_geographique" = "finessgeo")
       ) %>%
         distinct()
@@ -80,6 +99,5 @@ mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, dept_sf) {
         )
       )
     })
-
   })
 }

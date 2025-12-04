@@ -86,7 +86,7 @@ mod_ccam_select_server <- function(
         shinyjs::runjs(sprintf(
           '$("%s").show()',
           paste0("#", ns("code_libelle_container"))
-        ))  
+        ))
         shinyjs::runjs(sprintf(
           '$("%s").hide()',
           paste0("#", ns("thematique_container"))
@@ -144,22 +144,6 @@ mod_ccam_select_server <- function(
       ][1:limit]
       res <- res[order(COD_ACTE)]
 
-      # q <- paste0("%", search_term(), "%")
-
-      # res <- DBI::dbGetQuery(
-      #   con,
-      #   sprintf(
-      #     "
-      #     SELECT COD_ACTE AS code, NOM_COURT AS lib
-      #     FROM referentiel_actes
-      #     WHERE COD_ACTE ILIKE ? OR NOM_COURT ILIKE ?
-      #     LIMIT %d
-      #   ",
-      #     limit
-      #   ),
-      #   params = list(q, q)
-      # )
-
       choices <- setNames(res$COD_ACTE, paste(res$COD_ACTE, "-", res$NOM_COURT))
       current_choices(choices)
 
@@ -189,17 +173,6 @@ mod_ccam_select_server <- function(
         COD_ACTE %in% rv$ccam,
         .(COD_ACTE, NOM_COURT)
       ]
-      # rv$filtered_referentiel <- DBI::dbGetQuery(
-      #   con,
-      #   sprintf(
-      #     "
-      #       SELECT COD_ACTE, NOM_COURT
-      #       FROM referentiel_actes
-      #       WHERE COD_ACTE IN (?)
-      #     "
-      #   ),
-      #   params = list(rv$ccam)
-      # )
     })
 
     # Gestion du bouton "Select All"

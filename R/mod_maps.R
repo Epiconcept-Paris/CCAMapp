@@ -69,23 +69,97 @@ mod_maps_server <- function(id, rv, dept_sf) {
     output$map_by_dept <- renderMaplibre({
       req(rv$swm_etablissements_with_selected_ccam)
 
-      count_by_dept <- rv$swm_etablissements_with_selected_ccam %>%
-        st_drop_geometry() %>%
-        group_by(dept) %>%
-        summarise(n_etablissements = n())
-
       dept_sf_with_count <- left_join(
         dept_sf,
-        count_by_dept,
-        by = c("code" = "dept")
+        rv$stats_swm_selected_ccam,
+        by = c("code" = "dep")
       ) %>%
-        # mutate(n_etablissements = if_else(is.na(n_etablissements), 0, n_etablissements)) %>%
+        rename(
+          n_etablissements_swm = n_etablissements,
+          total_nb_actes_swm = total_nb_actes
+        ) %>%
+        left_join(
+          rv$stats_nationales_selected_ccam,
+          by = c("code" = "dep")
+        ) %>%
+        rename(
+          n_etablissements_nationales = n_etablissements,
+          total_nb_actes_nationales = total_nb_actes
+        ) %>%
+        mutate(
+          n_etablissements_swm_noNA = if_else(
+            is.na(n_etablissements_swm),
+            0,
+            n_etablissements_swm
+          )
+        ) %>%
+        mutate(
+          total_nb_actes_swm_noNA = if_else(
+            is.na(total_nb_actes_swm),
+            0,
+            total_nb_actes_swm
+          )
+        ) %>%
+        mutate(
+          n_etablissements_nationales_noNA = if_else(
+            is.na(n_etablissements_nationales),
+            0,
+            n_etablissements_nationales
+          )
+        ) %>%
+        mutate(
+          total_nb_actes_nationales_noNA = if_else(
+            is.na(total_nb_actes_nationales),
+            0,
+            total_nb_actes_nationales
+          )
+        ) %>%
+        mutate(
+          ratio_etablissements_swm_nationales = if_else(
+            n_etablissements_nationales_noNA == 0,
+            0,
+            n_etablissements_swm_noNA / n_etablissements_nationales_noNA
+          )
+        ) %>%
+        mutate(
+          ratio_actes_swm_nationales = if_else(
+            total_nb_actes_nationales_noNA == 0,
+            0,
+            total_nb_actes_swm_noNA / total_nb_actes_nationales_noNA
+          )
+        ) %>%
+        mutate(
+          ratio_etablissements_swm_nationales_percent = paste0(
+            format(
+              100 * ratio_etablissements_swm_nationales,
+              digits = 2,
+              nsmall = 2
+            ),
+            "%"
+          )
+        ) %>%
+        mutate(
+          ratio_actes_swm_nationales_percent = paste0(
+            format(100 * ratio_actes_swm_nationales, digits = 2, nsmall = 2),
+            "%"
+          )
+        ) %>%
         mutate(
           popup = paste0(
             "Département: ",
             code,
-            "<br>Nombre d'établissements: ",
-            n_etablissements
+            "<br>Nombre d'établissements SWM: ",
+            n_etablissements_swm_noNA,
+            "<br>Nombre d'établissements France: ",
+            n_etablissements_nationales_noNA,
+            "<br>Ratio établissements SWM/France: ",
+            ratio_etablissements_swm_nationales_percent,
+            "<br>Nombre d'actes SWM: ",
+            total_nb_actes_swm_noNA,
+            "<br>Nombre d'actes France: ",
+            total_nb_actes_nationales_noNA,
+            "<br>Ratio actes SWM/France: ",
+            ratio_actes_swm_nationales_percent
           )
         )
 
@@ -95,10 +169,10 @@ mod_maps_server <- function(id, rv, dept_sf) {
           source = dept_sf_with_count,
           popup = "popup",
           fill_color = interpolate(
-            column = "n_etablissements",
+            column = "n_etablissements_swm",
             values = c(
-              min(count_by_dept$n_etablissements, na.rm = TRUE),
-              max(count_by_dept$n_etablissements, na.rm = TRUE)
+              min(dept_sf_with_count$n_etablissements_swm, na.rm = TRUE),
+              max(dept_sf_with_count$n_etablissements_swm, na.rm = TRUE)
             ),
             stops = c("yellow", "darkred"),
             na_color = "grey"
@@ -109,8 +183,8 @@ mod_maps_server <- function(id, rv, dept_sf) {
           legend_title = "Nombre d'établissements",
           colors = c("yellow", "darkred"),
           values = c(
-            min(count_by_dept$n_etablissements, na.rm = TRUE),
-            max(count_by_dept$n_etablissements, na.rm = TRUE)
+            min(dept_sf_with_count$n_etablissements_swm, na.rm = TRUE),
+            max(dept_sf_with_count$n_etablissements_swm, na.rm = TRUE)
           )
         )
     })

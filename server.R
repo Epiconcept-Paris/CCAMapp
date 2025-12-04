@@ -1,22 +1,4 @@
-# Define UI for application that draws a histogram
-ui <- page_sidebar(
-  useShinyjs(),
-  title = "Exploration actes CCAM",
-  sidebar = sidebar(
-    mod_ccam_select_ui("ccam1")
-  ),
-  tagList(
-    fluidRow(
-      h2("Actes CCAM sélectionnés"),
-      DTOutput("selected_ccam")
-    ),
-    fluidRow(mod_filter_open_ccam_ui("filter_open_ccam_1")),
-    fluidRow(mod_maps_ui("maps_1"))
-  )
-)
-
-# Define server logic required to draw a histogram
-server <- function(input, output, session) {
+function(input, output, session) {
 
   referentiel_actes_csv_path <- file.path(
     here::here("external_data"),
@@ -30,6 +12,7 @@ server <- function(input, output, session) {
   referentiel_actes_csv <- data.table::fread(referentiel_actes_csv_path)
   open_ccam_csv <- data.table::fread(open_ccam_csv_path)
 
+  swm_sf <- readRDS(file.path(here::here("data"), "swm_cleaned_by_finess_sf.rds"))
 
   dept_sf <- sf::read_sf(
     here::here("external_data", "departements.geojson")
@@ -52,7 +35,9 @@ server <- function(input, output, session) {
   # Other server logic
   rv <- reactiveValues(
     ccam = NULL,
-    filtered_referentiel = NULL
+    filtered_referentiel = NULL,
+    stats_nationales_selected_ccam = NULL,
+    stats_swm_selected_ccam = NULL
   )
 
   output$selected_ccam <- renderDT({
@@ -66,9 +51,6 @@ server <- function(input, output, session) {
   })
   mod_ccam_select_server("ccam1", referentiel_actes_csv, rv, all_thematics_codes)
 
-  mod_filter_open_ccam_server("filter_open_ccam_1", rv, open_ccam_csv, dept_sf)
+  mod_filter_open_ccam_server("filter_open_ccam_1", rv, open_ccam_csv, swm_sf)
   mod_maps_server("maps_1", rv, dept_sf)
 }
-
-# Run the application
-shinyApp(ui = ui, server = server)
