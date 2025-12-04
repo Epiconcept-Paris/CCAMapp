@@ -6,11 +6,18 @@
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS tagList textInput selectizeInput actionButton debounce reactive observeEvent updateSelectizeInput moduleServer reactiveVal
+#' @importFrom shiny NS tagList textInput selectizeInput actionButton debounce reactive observeEvent updateSelectizeInput updateTextInput updateSelectInput moduleServer reactiveVal
+#' @import shinyjs
 mod_ccam_select_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
+    actionButton(
+      ns("erase_selection"),
+      "Effacer la sélection",
+      class = "btn-danger"
+    ),
+    h4("Recherche d'actes CCAM par code ou libellé"),
     textInput(
       inputId = ns("search"),
       label = "Recherche (code ou libellé)",
@@ -19,9 +26,10 @@ mod_ccam_select_ui <- function(id) {
     div(
       id = ns("ccam_container"),
       style = "display: none;",
+      h5("Faites votre sélection d'actes CCAM"),
       selectizeInput(
         inputId = ns("ccam"),
-        label = "CCAM (max 25 résultats)",
+        label = "Actes CCAM trouvés (max 25 résultats)",
         choices = NULL,
         multiple = TRUE,
         options = list(
@@ -35,6 +43,8 @@ mod_ccam_select_ui <- function(id) {
         label = "Sélectionner tous les résultats proposés"
       )
     ),
+    br(),
+    h4("Vous pouvez également sélectionner des actes par thématique"),
     selectInput(
       inputId = ns("select_ccam_theme"),
       label = "Sélectionner des actes par thématique",
@@ -59,6 +69,11 @@ mod_ccam_select_server <- function(
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    local_rv <- reactiveValues(
+      ccam_thematique = NULL,
+      ccam = NULL
+    )
+
     updateSelectInput(
       session,
       "select_ccam_theme",
@@ -74,7 +89,7 @@ mod_ccam_select_server <- function(
 
       ccam_thematique <- unlist(all_thematics_codes[index_thematique])
 
-      rv$ccam <- unique(c(rv$ccam, ccam_thematique))
+      local_rv$ccam_thematique <- ccam_thematique
     })
 
     # Variable réactive pour stocker les choix disponibles
@@ -84,8 +99,10 @@ mod_ccam_select_server <- function(
 
     observeEvent(search_term(), {
       req(nchar(search_term()) >= 2)
-
-      golem::invoke_js("hideid", ns("ccam_container"))
+      shinyjs::runjs(sprintf(
+        '$("%s").hide()',
+        paste0("#", ns("ccam_container"))
+      ))
 
       q <- paste0("%", search_term(), "%")
 
@@ -113,11 +130,18 @@ mod_ccam_select_server <- function(
         server = TRUE
       )
 
-      golem::invoke_js("showid", ns("ccam_container"))
+      shinyjs::runjs(sprintf(
+        '$("%s").show()',
+        paste0("#", ns("ccam_container"))
+      ))
     })
 
     observeEvent(input$ccam, {
-      rv$ccam <- unique(c(rv$ccam, input$ccam))
+      local_rv$ccam <- input$ccam
+    })
+
+    observeEvent(c(local_rv$ccam, local_rv$ccam_thematique), {
+      rv$ccam <- unique(c(local_rv$ccam, local_rv$ccam_thematique))
     })
 
     observeEvent(rv$ccam, {
@@ -144,6 +168,56 @@ mod_ccam_select_server <- function(
           selected = as.character(choices)
         )
       }
+    })
+
+    observeEvent(input$erase_selection, {
+      rv$ccam <- NULL
+      rv$filtered_referentiel <- NULL
+      rv$swm_etablissements_with_selected_ccam <- NULL
+      local_rv$ccam_thematique <- NULL
+      local_rv$ccam <- NULL
+
+      updateTextInput(
+        session,
+        "search",
+        value = ""
+      )
+
+      updateSelectizeInput(
+        session,
+        "ccam",
+        choices = NULL,
+        selected = NULL,
+        server = TRUE
+      )
+
+      # On utilise JavaScript pour forcer la réinitialisation de la sélection
+      # Car j'avais des problèmes avec le selectizeInput lors de la réinitialisation
+      # shinyjs::runjs(sprintf(
+      #   'setTimeout(function() {
+      #      var $el = $("#%s");
+      #      if ($el.length && $el[0].selectize) {
+      #        var selectize = $el[0].selectize;
+      #        selectize.clear();
+      #        selectize.clearOptions();
+      #      }
+      #    }, 100);',
+      #   ns("ccam")
+      # ))
+
+      shinyjs::runjs(sprintf(
+        '$("%s").hide()',
+        paste0("#", ns("ccam_container"))
+      ))
+
+      updateSelectInput(
+        session,
+        "select_ccam_theme",
+        choices = names(all_thematics_codes),
+        selected = NULL
+      )
+
+      current_choices(NULL)
     })
   })
 }
