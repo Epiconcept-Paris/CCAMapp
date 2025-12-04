@@ -17,39 +17,50 @@ mod_ccam_select_ui <- function(id) {
       "Effacer la sélection",
       class = "btn-danger"
     ),
-    h4("Recherche d'actes CCAM par code ou libellé"),
-    textInput(
-      inputId = ns("search"),
-      label = "Recherche (code ou libellé)",
-      placeholder = "Ex : radio, AAQP…"
+    radioButtons(
+      inputId = ns("search_type"),
+      label = "Type de recherche",
+      choices = c("Code/Libellé" = "code_libelle", "Thématique" = "thematique"),
+      selected = "thematique"
     ),
     div(
-      id = ns("ccam_container"),
+      id = ns("code_libelle_container"),
       style = "display: none;",
-      h5("Faites votre sélection d'actes CCAM"),
-      selectizeInput(
-        inputId = ns("ccam"),
-        label = "Actes CCAM trouvés (max 25 résultats)",
-        choices = NULL,
-        multiple = TRUE,
-        options = list(
-          maxOptions = 25,
-          closeAfterSelect = FALSE
-        )
+      h4("Recherche d'actes CCAM par code ou libellé"),
+      textInput(
+        inputId = ns("search"),
+        label = "Recherche (code ou libellé)",
+        placeholder = "Ex : radio, AAQP…"
       ),
-
-      actionButton(
-        inputId = ns("select_all"),
-        label = "Sélectionner tous les résultats proposés"
+      div(
+        id = ns("ccam_container"),
+        style = "display: none;",
+        h5("Faites votre sélection d'actes CCAM"),
+        selectizeInput(
+          inputId = ns("ccam"),
+          label = "Actes CCAM trouvés (max 25 résultats)",
+          choices = NULL,
+          multiple = TRUE,
+          options = list(
+            maxOptions = 25,
+            closeAfterSelect = FALSE
+          )
+        ),
+        actionButton(
+          inputId = ns("select_all"),
+          label = "Sélectionner tous les résultats proposés"
+        )
       )
     ),
-    br(),
-    h4("Vous pouvez également sélectionner des actes par thématique"),
-    selectInput(
-      inputId = ns("select_ccam_theme"),
-      label = "Sélectionner des actes par thématique",
-      choices = NULL,
-      multiple = TRUE
+    div(
+      id = ns("thematique_container"),
+      h4("Recherche d'actes CCAM par thématique"),
+      selectInput(
+        inputId = ns("select_ccam_theme"),
+        label = "Sélectionner des actes par thématique",
+        choices = NULL,
+        multiple = TRUE
+      )
     )
   )
 }
@@ -68,6 +79,29 @@ mod_ccam_select_server <- function(
 ) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    observeEvent(input$search_type, {
+      print(input$search_type)
+      if (input$search_type == "code_libelle") {
+        shinyjs::runjs(sprintf(
+          '$("%s").show()',
+          paste0("#", ns("code_libelle_container"))
+        ))  
+        shinyjs::runjs(sprintf(
+          '$("%s").hide()',
+          paste0("#", ns("thematique_container"))
+        ))
+      } else {
+        shinyjs::runjs(sprintf(
+          '$("%s").show()',
+          paste0("#", ns("thematique_container"))
+        ))
+        shinyjs::runjs(sprintf(
+          '$("%s").hide()',
+          paste0("#", ns("code_libelle_container"))
+        ))
+      }
+    })
 
     local_rv <- reactiveValues(
       ccam_thematique = NULL,
@@ -104,10 +138,11 @@ mod_ccam_select_server <- function(
         paste0("#", ns("ccam_container"))
       ))
 
-
-      res <- referentiel_actes_csv[COD_ACTE %like% search_term() | NOM_COURT %like% search_term(), .(COD_ACTE, NOM_COURT)][1:limit]
+      res <- referentiel_actes_csv[
+        COD_ACTE %like% search_term() | NOM_COURT %like% search_term(),
+        .(COD_ACTE, NOM_COURT)
+      ][1:limit]
       res <- res[order(COD_ACTE)]
-      
 
       # q <- paste0("%", search_term(), "%")
 
@@ -150,7 +185,10 @@ mod_ccam_select_server <- function(
     })
 
     observeEvent(rv$ccam, {
-      rv$filtered_referentiel <- referentiel_actes_csv[COD_ACTE %in% rv$ccam, .(COD_ACTE, NOM_COURT)]
+      rv$filtered_referentiel <- referentiel_actes_csv[
+        COD_ACTE %in% rv$ccam,
+        .(COD_ACTE, NOM_COURT)
+      ]
       # rv$filtered_referentiel <- DBI::dbGetQuery(
       #   con,
       #   sprintf(
