@@ -6,16 +6,16 @@ client_version = '1.27.2'
 created_at = ''
 dismissed_at = ''
 type = 'r-shiny'
-configuration_name = 'CCAM_appli-ULCA'
-id = '019ae84f-d2f6-1047-bdf5-c42ddf9277a1'
-dashboard_url = 'https://connect.posit.cloud/ymansiaux/content/019ae84f-d2f6-1047-bdf5-c42ddf9277a1'
-direct_url = 'https://019ae84f-d2f6-1047-bdf5-c42ddf9277a1.share.connect.posit.cloud'
-logs_url = 'https://connect.posit.cloud/ymansiaux/content/019ae84f-d2f6-1047-bdf5-c42ddf9277a1/history'
-deployed_at = '2025-12-04T08:42:27+01:00'
-bundle_id = '019ae84f-d2f9-5b3e-8da5-a494ea345bfe'
+configuration_name = 'CCAMapp-VNLE'
+id = '019ae850-d049-ec39-3370-0def4e8c76ad'
+dashboard_url = 'https://connect.posit.cloud/yohannepi/content/019ae850-d049-ec39-3370-0def4e8c76ad'
+direct_url = 'https://019ae850-d049-ec39-3370-0def4e8c76ad.share.connect.posit.cloud'
+logs_url = 'https://connect.posit.cloud/yohannepi/content/019ae850-d049-ec39-3370-0def4e8c76ad/history'
+deployed_at = '2025-12-04T08:43:33+01:00'
+bundle_id = '019ae850-d04a-8b66-bcd6-ddc89d3cc048'
 files = [
-  '.posit/publish/CCAM_appli-ULCA.toml',
-  '.posit/publish/deployments/deployment-NVQS.toml',
+  '.posit/publish/CCAMapp-VNLE.toml',
+  '.posit/publish/deployments/deployment-INQT.toml',
   'R/mod_ccam_select.R',
   'R/mod_filter_open_ccam.R',
   'R/mod_maps.R',
@@ -70,7 +70,7 @@ files = [
 ]
 
 [connect_cloud]
-account_name = 'ymansiaux'
+account_name = 'yohannepi'
 
 [configuration]
 product_type = 'connect_cloud'
@@ -80,14 +80,14 @@ entrypoint = 'app.R'
 validate = true
 files = [
   '/app.R',
-  '/.posit/publish/CCAM_appli-ULCA.toml',
-  '/.posit/publish/deployments/deployment-NVQS.toml',
+  '/renv.lock',
+  '/.posit/publish/CCAMapp-VNLE.toml',
+  '/.posit/publish/deployments/deployment-INQT.toml',
   '/R',
-  '/data',
   '/external_data',
-  '/renv.lock'
+  '/data'
 ]
-title = 'CCAM_appli'
+title = 'CCAMapp'
 
 [configuration.r]
 version = '4.4.2'
