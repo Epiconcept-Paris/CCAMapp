@@ -186,7 +186,7 @@ mod_ccam_select_server <- function(
       }
     })
 
-    observeEvent(input$erase_selection, {
+    observeEvent(c(input$erase_selection, input$search_type), {
       rv$ccam <- NULL
       rv$filtered_referentiel <- NULL
       rv$swm_etablissements_with_selected_ccam <- NULL

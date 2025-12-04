@@ -11,8 +11,8 @@ id = '019ae850-d049-ec39-3370-0def4e8c76ad'
 dashboard_url = 'https://connect.posit.cloud/yohannepi/content/019ae850-d049-ec39-3370-0def4e8c76ad'
 direct_url = 'https://019ae850-d049-ec39-3370-0def4e8c76ad.share.connect.posit.cloud'
 logs_url = 'https://connect.posit.cloud/yohannepi/content/019ae850-d049-ec39-3370-0def4e8c76ad/history'
-deployed_at = '2025-12-04T12:11:30+01:00'
-bundle_id = '019ae90f-4525-662a-c9e3-a7a22e14cd30'
+deployed_at = '2025-12-04T16:51:14+01:00'
+bundle_id = '019aea0f-5ce1-bc3f-b8bb-5cbd3c8bf4f8'
 files = [
   '.posit/publish/CCAMapp-VNLE.toml',
   '.posit/publish/deployments/deployment-INQT.toml',
@@ -222,6 +222,21 @@ author = 'Winston Chang [aut, cre], Posit Software, PBC [cph, fnd]'
 'config/testthat/edition' = '3'
 'config/needs/website' = 'tidyverse/tidytemplate, ggplot2, microbenchmark, scales'
 
+[renv.packages.RColorBrewer]
+package = 'RColorBrewer'
+version = '1.1-3'
+source = 'Repository'
+repository = 'CRAN'
+depends = ['R (>= 2.0.0)']
+hash = ''
+title = 'ColorBrewer Palettes'
+'authors@r' = 'c(person(given = "Erich", family = "Neuwirth", role = c("aut", "cre"), email = "erich.neuwirth@univie.ac.at"))'
+maintainer = 'Erich Neuwirth <erich.neuwirth@univie.ac.at>'
+description = 'Provides color schemes for maps (and other graphics) designed by Cynthia Brewer as described at http://colorbrewer2.org.'
+license = 'Apache License 2.0'
+needscompilation = 'no'
+author = 'Erich Neuwirth [aut, cre]'
+
 [renv.packages.Rcpp]
 package = 'Rcpp'
 version = '1.1.0'
@@ -241,6 +256,30 @@ roxygennote = '6.1.1'
 encoding = 'UTF-8'
 needscompilation = 'yes'
 author = 'Dirk Eddelbuettel [aut, cre] (ORCID: <https://orcid.org/0000-0001-6419-907X>), Romain Francois [aut] (ORCID: <https://orcid.org/0000-0002-2444-4226>), JJ Allaire [aut] (ORCID: <https://orcid.org/0000-0003-0174-9868>), Kevin Ushey [aut] (ORCID: <https://orcid.org/0000-0003-2880-7407>), Qiang Kou [aut] (ORCID: <https://orcid.org/0000-0001-6786-5453>), Nathan Russell [aut], Iñaki Ucar [aut] (ORCID: <https://orcid.org/0000-0001-6403-5550>), Doug Bates [aut] (ORCID: <https://orcid.org/0000-0001-8316-9503>), John Chambers [aut]'
+
+[renv.packages.S7]
+package = 'S7'
+version = '0.2.1'
+source = 'Repository'
+repository = 'CRAN'
+depends = ['R (>= 3.5.0)']
+hash = ''
+title = 'An Object Oriented System Meant to Become a Successor to S3 and S4'
+'authors@r' = 'c( person("Object-Oriented Programming Working Group", role = "cph"), person("Davis", "Vaughan", role = "aut"), person("Jim", "Hester", role = "aut", comment = c(ORCID = "0000-0002-2739-7082")), person("Tomasz", "Kalinowski", role = "aut"), person("Will", "Landau", role = "aut"), person("Michael", "Lawrence", role = "aut"), person("Martin", "Maechler", role = "aut", comment = c(ORCID = "0000-0002-8685-9910")), person("Luke", "Tierney", role = "aut"), person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4757-117X")) )'
+maintainer = 'Hadley Wickham <hadley@posit.co>'
+description = "A new object oriented programming system designed to be a successor to S3 and S4. It includes formal class, generic, and method specification, and a limited form of multiple dispatch. It has been designed and implemented collaboratively by the R Consortium Object-Oriented Programming Working Group, which includes representatives from R-Core, 'Bioconductor', 'Posit'/'tidyverse', and the wider R community."
+url = 'https://rconsortium.github.io/S7/, https://github.com/RConsortium/S7'
+bugreports = 'https://github.com/RConsortium/S7/issues'
+license = 'MIT + file LICENSE'
+imports = ['utils']
+suggests = ['bench', 'callr', 'covr', 'knitr', 'methods', 'rmarkdown', 'testthat (>= 3.2.0)', 'tibble']
+vignettebuilder = 'knitr'
+roxygennote = '7.3.3'
+encoding = 'UTF-8'
+needscompilation = 'yes'
+author = 'Object-Oriented Programming Working Group [cph], Davis Vaughan [aut], Jim Hester [aut] (ORCID: <https://orcid.org/0000-0002-2739-7082>), Tomasz Kalinowski [aut], Will Landau [aut], Michael Lawrence [aut], Martin Maechler [aut] (ORCID: <https://orcid.org/0000-0002-8685-9910>), Luke Tierney [aut], Hadley Wickham [aut, cre] (ORCID: <https://orcid.org/0000-0003-4757-117X>)'
+'config/testthat/edition' = '3'
+'config/needs/website' = 'sloop'
 
 [renv.packages.base64enc]
 package = 'base64enc'
@@ -648,6 +687,27 @@ author = 'Hadley Wickham [aut, cre], Yihui Xie [aut] (ORCID: <https://orcid.org/
 'config/testthat/edition' = '3'
 'config/needs/website' = 'tidyverse/tidytemplate'
 
+[renv.packages.farver]
+package = 'farver'
+version = '2.1.2'
+source = 'Repository'
+repository = 'CRAN'
+hash = ''
+type = 'Package'
+title = 'High Performance Colour Space Manipulation'
+'authors@r' = 'c( person("Thomas Lin", "Pedersen", , "thomas.pedersen@posit.co", role = c("cre", "aut"), comment = c(ORCID = "0000-0002-5147-4711")), person("Berendea", "Nicolae", role = "aut", comment = "Author of the ColorSpace C++ library"), person("Romain", "François", , "romain@purrple.cat", role = "aut", comment = c(ORCID = "0000-0002-2444-4226")), person("Posit, PBC", role = c("cph", "fnd")) )'
+maintainer = 'Thomas Lin Pedersen <thomas.pedersen@posit.co>'
+description = "The encoding of colour can be handled in many different ways, using different colour spaces. As different colour spaces have different uses, efficient conversion between these representations are important. The 'farver' package provides a set of functions that gives access to very fast colour space conversion and comparisons implemented in C++, and offers speed improvements over the 'convertColor' function in the 'grDevices' package."
+url = 'https://farver.data-imaginist.com, https://github.com/thomasp85/farver'
+bugreports = 'https://github.com/thomasp85/farver/issues'
+license = 'MIT + file LICENSE'
+suggests = ['covr', 'testthat (>= 3.0.0)']
+roxygennote = '7.3.1'
+encoding = 'UTF-8'
+needscompilation = 'yes'
+author = 'Thomas Lin Pedersen [cre, aut] (<https://orcid.org/0000-0002-5147-4711>), Berendea Nicolae [aut] (Author of the ColorSpace C++ library), Romain François [aut] (<https://orcid.org/0000-0002-2444-4226>), Posit, PBC [cph, fnd]'
+'config/testthat/edition' = '3'
+
 [renv.packages.fastmap]
 package = 'fastmap'
 version = '1.2.0'
@@ -803,6 +863,30 @@ encoding = 'UTF-8'
 needscompilation = 'yes'
 author = 'David Cooley [aut, cre]'
 
+[renv.packages.ggplot2]
+package = 'ggplot2'
+version = '4.0.1'
+source = 'Repository'
+repository = 'CRAN'
+depends = ['R (>= 4.1)']
+hash = ''
+title = 'Create Elegant Data Visualisations Using the Grammar of Graphics'
+'authors@r' = 'c( person("Hadley", "Wickham", , "hadley@posit.co", role = "aut", comment = c(ORCID = "0000-0003-4757-117X")), person("Winston", "Chang", role = "aut", comment = c(ORCID = "0000-0002-1576-2126")), person("Lionel", "Henry", role = "aut"), person("Thomas Lin", "Pedersen", , "thomas.pedersen@posit.co", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5147-4711")), person("Kohske", "Takahashi", role = "aut"), person("Claus", "Wilke", role = "aut", comment = c(ORCID = "0000-0002-7470-9261")), person("Kara", "Woo", role = "aut", comment = c(ORCID = "0000-0002-5125-4188")), person("Hiroaki", "Yutani", role = "aut", comment = c(ORCID = "0000-0002-3385-7233")), person("Dewey", "Dunnington", role = "aut", comment = c(ORCID = "0000-0002-9415-4582")), person("Teun", "van den Brand", role = "aut", comment = c(ORCID = "0000-0002-9335-7468")), person("Posit, PBC", role = c("cph", "fnd"), comment = c(ROR = "03wc8by49")) )'
+maintainer = 'Thomas Lin Pedersen <thomas.pedersen@posit.co>'
+description = "A system for 'declaratively' creating graphics, based on \"The Grammar of Graphics\". You provide the data, tell 'ggplot2' how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details."
+url = 'https://ggplot2.tidyverse.org, https://github.com/tidyverse/ggplot2'
+bugreports = 'https://github.com/tidyverse/ggplot2/issues'
+license = 'MIT + file LICENSE'
+imports = ['cli', 'grDevices', 'grid', 'gtable (>= 0.3.6)', 'isoband', 'lifecycle (> 1.0.1)', 'rlang (>= 1.1.0)', 'S7', 'scales (>= 1.4.0)', 'stats', 'vctrs (>= 0.6.0)', 'withr (>= 2.5.0)']
+suggests = ['broom', 'covr', 'dplyr', 'ggplot2movies', 'hexbin', 'Hmisc', 'hms', 'knitr', 'mapproj', 'maps', 'MASS', 'mgcv', 'multcomp', 'munsell', 'nlme', 'profvis', 'quantreg', 'quarto', 'ragg (>= 1.2.6)', 'RColorBrewer', 'roxygen2', 'rpart', 'sf (>= 0.7-3)', 'svglite (>= 2.1.2)', 'testthat (>= 3.1.5)', 'tibble', 'vdiffr (>= 1.0.6)', 'xml2']
+vignettebuilder = 'quarto'
+roxygennote = '7.3.3'
+encoding = 'UTF-8'
+needscompilation = 'no'
+author = 'Hadley Wickham [aut] (ORCID: <https://orcid.org/0000-0003-4757-117X>), Winston Chang [aut] (ORCID: <https://orcid.org/0000-0002-1576-2126>), Lionel Henry [aut], Thomas Lin Pedersen [aut, cre] (ORCID: <https://orcid.org/0000-0002-5147-4711>), Kohske Takahashi [aut], Claus Wilke [aut] (ORCID: <https://orcid.org/0000-0002-7470-9261>), Kara Woo [aut] (ORCID: <https://orcid.org/0000-0002-5125-4188>), Hiroaki Yutani [aut] (ORCID: <https://orcid.org/0000-0002-3385-7233>), Dewey Dunnington [aut] (ORCID: <https://orcid.org/0000-0002-9415-4582>), Teun van den Brand [aut] (ORCID: <https://orcid.org/0000-0002-9335-7468>), Posit, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)'
+'config/testthat/edition' = '3'
+'config/needs/website' = 'ggtext, tidyr, forcats, tidyverse/tidytemplate'
+
 [renv.packages.glue]
 package = 'glue'
 version = '1.8.0'
@@ -826,6 +910,30 @@ needscompilation = 'yes'
 author = 'Jim Hester [aut] (<https://orcid.org/0000-0002-2739-7082>), Jennifer Bryan [aut, cre] (<https://orcid.org/0000-0002-6983-2759>), Posit Software, PBC [cph, fnd]'
 'config/testthat/edition' = '3'
 'config/needs/website' = 'bench, forcats, ggbeeswarm, ggplot2, R.utils, rprintf, tidyr, tidyverse/tidytemplate'
+
+[renv.packages.gtable]
+package = 'gtable'
+version = '0.3.6'
+source = 'Repository'
+repository = 'CRAN'
+depends = ['R (>= 4.0)']
+hash = ''
+title = "Arrange 'Grobs' in Tables"
+'authors@r' = 'c( person("Hadley", "Wickham", , "hadley@posit.co", role = "aut"), person("Thomas Lin", "Pedersen", , "thomas.pedersen@posit.co", role = c("aut", "cre")), person("Posit Software, PBC", role = c("cph", "fnd")) )'
+maintainer = 'Thomas Lin Pedersen <thomas.pedersen@posit.co>'
+description = "Tools to make it easier to work with \"tables\" of 'grobs'. The 'gtable' package defines a 'gtable' grob class that specifies a grid along with a list of grobs and their placement in the grid. Further the package makes it easy to manipulate and combine 'gtable' objects so that complex compositions can be built up sequentially."
+url = 'https://gtable.r-lib.org, https://github.com/r-lib/gtable'
+bugreports = 'https://github.com/r-lib/gtable/issues'
+license = 'MIT + file LICENSE'
+imports = ['cli', 'glue', 'grid', 'lifecycle', 'rlang (>= 1.1.0)', 'stats']
+suggests = ['covr', 'ggplot2', 'knitr', 'profvis', 'rmarkdown', 'testthat (>= 3.0.0)']
+vignettebuilder = 'knitr'
+roxygennote = '7.3.2'
+encoding = 'UTF-8'
+needscompilation = 'no'
+author = 'Hadley Wickham [aut], Thomas Lin Pedersen [aut, cre], Posit Software, PBC [cph, fnd]'
+'config/testthat/edition' = '3'
+'config/needs/website' = 'tidyverse/tidytemplate'
 
 [renv.packages.here]
 package = 'here'
@@ -875,7 +983,7 @@ author = 'Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>), Yixuan
 
 [renv.packages.htmltools]
 package = 'htmltools'
-version = '0.5.8.1'
+version = '0.5.9'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 2.14.1)']
@@ -890,10 +998,10 @@ bugreports = 'https://github.com/rstudio/htmltools/issues'
 license = 'GPL (>= 2)'
 imports = ['base64enc', 'digest', 'fastmap (>= 1.1.0)', 'grDevices', 'rlang (>= 1.0.0)', 'utils']
 suggests = ['Cairo', 'markdown', 'ragg', 'shiny', 'testthat', 'withr']
-roxygennote = '7.3.1'
+roxygennote = '7.3.3'
 encoding = 'UTF-8'
 needscompilation = 'yes'
-author = 'Joe Cheng [aut], Carson Sievert [aut, cre] (<https://orcid.org/0000-0002-4958-2844>), Barret Schloerke [aut] (<https://orcid.org/0000-0001-9986-114X>), Winston Chang [aut] (<https://orcid.org/0000-0002-1576-2126>), Yihui Xie [aut], Jeff Allen [aut], Posit Software, PBC [cph, fnd]'
+author = 'Joe Cheng [aut], Carson Sievert [aut, cre] (ORCID: <https://orcid.org/0000-0002-4958-2844>), Barret Schloerke [aut] (ORCID: <https://orcid.org/0000-0001-9986-114X>), Winston Chang [aut] (ORCID: <https://orcid.org/0000-0002-1576-2126>), Yihui Xie [aut], Jeff Allen [aut], Posit Software, PBC [cph, fnd]'
 'config/needs/website' = 'rstudio/quillt, bench'
 
 [renv.packages.htmlwidgets]
@@ -941,6 +1049,30 @@ encoding = 'UTF-8'
 needscompilation = 'yes'
 author = 'Joe Cheng [aut], Winston Chang [aut, cre], Posit, PBC fnd [cph], Hector Corrada Bravo [ctb], Jeroen Ooms [ctb], Andrzej Krzemienski [cph] (optional.hpp), libuv project contributors [cph] (libuv library, see src/libuv/AUTHORS file), Joyent, Inc. and other Node contributors [cph] (libuv library, see src/libuv/AUTHORS file; and http-parser library, see src/http-parser/AUTHORS file), Niels Provos [cph] (libuv subcomponent: tree.h), Internet Systems Consortium, Inc. [cph] (libuv subcomponent: inet_pton and inet_ntop, contained in src/libuv/src/inet.c), Alexander Chemeris [cph] (libuv subcomponent: stdint-msvc2008.h (from msinttypes)), Google, Inc. [cph] (libuv subcomponent: pthread-fixes.c), Sony Mobile Communcations AB [cph] (libuv subcomponent: pthread-fixes.c), Berkeley Software Design Inc. [cph] (libuv subcomponent: android-ifaddrs.h, android-ifaddrs.c), Kenneth MacKay [cph] (libuv subcomponent: android-ifaddrs.h, android-ifaddrs.c), Emergya (Cloud4all, FP7/2007-2013, grant agreement no 289016) [cph] (libuv subcomponent: android-ifaddrs.h, android-ifaddrs.c), Steve Reid [aut] (SHA-1 implementation), James Brown [aut] (SHA-1 implementation), Bob Trower [aut] (base64 implementation), Alexander Peslyak [aut] (MD5 implementation), Trantor Standard Systems [cph] (base64 implementation), Igor Sysoev [cph] (http-parser)'
 systemrequirements = 'GNU make, zlib'
+
+[renv.packages.isoband]
+package = 'isoband'
+version = '0.2.7'
+source = 'Repository'
+repository = 'CRAN'
+hash = ''
+title = 'Generate Isolines and Isobands from Regularly Spaced Elevation Grids'
+'authors@r' = 'c( person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4757-117X")), person("Claus O.", "Wilke", , "wilke@austin.utexas.edu", role = "aut", comment = c("Original author", ORCID = "0000-0002-7470-9261")), person("Thomas Lin", "Pedersen", , "thomasp85@gmail.com", role = "aut", comment = c(ORCID = "0000-0002-5147-4711")) )'
+maintainer = 'Hadley Wickham <hadley@posit.co>'
+description = 'A fast C++ implementation to generate contour lines (isolines) and contour polygons (isobands) from regularly spaced grids containing elevation data.'
+url = 'https://isoband.r-lib.org'
+bugreports = 'https://github.com/r-lib/isoband/issues'
+license = 'MIT + file LICENSE'
+imports = ['grid', 'utils']
+suggests = ['covr', 'ggplot2', 'knitr', 'magick', 'microbenchmark', 'rmarkdown', 'sf', 'testthat', 'xml2']
+vignettebuilder = 'knitr'
+roxygennote = '7.2.3'
+encoding = 'UTF-8'
+needscompilation = 'yes'
+author = 'Hadley Wickham [aut, cre] (<https://orcid.org/0000-0003-4757-117X>), Claus O. Wilke [aut] (Original author, <https://orcid.org/0000-0002-7470-9261>), Thomas Lin Pedersen [aut] (<https://orcid.org/0000-0002-5147-4711>)'
+'config/testthat/edition' = '3'
+'config/needs/website' = 'tidyverse/tidytemplate'
+systemrequirements = 'C++11'
 
 [renv.packages.jquerylib]
 package = 'jquerylib'
@@ -1028,6 +1160,21 @@ encoding = 'UTF-8'
 needscompilation = 'no'
 author = 'Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>, https://yihui.org), Abhraneel Sarma [ctb], Adam Vogt [ctb], Alastair Andrew [ctb], Alex Zvoleff [ctb], Amar Al-Zubaidi [ctb], Andre Simon [ctb] (the CSS files under inst/themes/ were derived from the Highlight package http://www.andre-simon.de), Aron Atkins [ctb], Aaron Wolen [ctb], Ashley Manton [ctb], Atsushi Yasumoto [ctb] (<https://orcid.org/0000-0002-8335-495X>), Ben Baumer [ctb], Brian Diggs [ctb], Brian Zhang [ctb], Bulat Yapparov [ctb], Cassio Pereira [ctb], Christophe Dervieux [ctb], David Hall [ctb], David Hugh-Jones [ctb], David Robinson [ctb], Doug Hemken [ctb], Duncan Murdoch [ctb], Elio Campitelli [ctb], Ellis Hughes [ctb], Emily Riederer [ctb], Fabian Hirschmann [ctb], Fitch Simeon [ctb], Forest Fang [ctb], Frank E Harrell Jr [ctb] (the Sweavel package at inst/misc/Sweavel.sty), Garrick Aden-Buie [ctb], Gregoire Detrez [ctb], Hadley Wickham [ctb], Hao Zhu [ctb], Heewon Jeon [ctb], Henrik Bengtsson [ctb], Hiroaki Yutani [ctb], Ian Lyttle [ctb], Hodges Daniel [ctb], Jacob Bien [ctb], Jake Burkhead [ctb], James Manton [ctb], Jared Lander [ctb], Jason Punyon [ctb], Javier Luraschi [ctb], Jeff Arnold [ctb], Jenny Bryan [ctb], Jeremy Ashkenas [ctb, cph] (the CSS file at inst/misc/docco-classic.css), Jeremy Stephens [ctb], Jim Hester [ctb], Joe Cheng [ctb], Johannes Ranke [ctb], John Honaker [ctb], John Muschelli [ctb], Jonathan Keane [ctb], JJ Allaire [ctb], Johan Toloe [ctb], Jonathan Sidi [ctb], Joseph Larmarange [ctb], Julien Barnier [ctb], Kaiyin Zhong [ctb], Kamil Slowikowski [ctb], Karl Forner [ctb], Kevin K. Smith [ctb], Kirill Mueller [ctb], Kohske Takahashi [ctb], Lorenz Walthert [ctb], Lucas Gallindo [ctb], Marius Hofert [ctb], Martin Modrák [ctb], Michael Chirico [ctb], Michael Friendly [ctb], Michal Bojanowski [ctb], Michel Kuhlmann [ctb], Miller Patrick [ctb], Nacho Caballero [ctb], Nick Salkowski [ctb], Niels Richard Hansen [ctb], Noam Ross [ctb], Obada Mahdi [ctb], Pavel N. Krivitsky [ctb] (<https://orcid.org/0000-0002-9101-3362>), Pedro Faria [ctb], Qiang Li [ctb], Ramnath Vaidyanathan [ctb], Richard Cotton [ctb], Robert Krzyzanowski [ctb], Rodrigo Copetti [ctb], Romain Francois [ctb], Ruaridh Williamson [ctb], Sagiru Mati [ctb] (<https://orcid.org/0000-0003-1413-3974>), Scott Kostyshak [ctb], Sebastian Meyer [ctb], Sietse Brouwer [ctb], Simon de Bernard [ctb], Sylvain Rousseau [ctb], Taiyun Wei [ctb], Thibaut Assus [ctb], Thibaut Lamadon [ctb], Thomas Leeper [ctb], Tim Mastny [ctb], Tom Torsney-Weir [ctb], Trevor Davis [ctb], Viktoras Veitas [ctb], Weicheng Zhu [ctb], Wush Wu [ctb], Zachary Foster [ctb], Zhian N. Kamvar [ctb] (<https://orcid.org/0000-0003-1458-7108>), Posit Software, PBC [cph, fnd]'
 systemrequirements = 'Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). The function rst2pdf() requires rst2pdf (https://github.com/rst2pdf/rst2pdf).'
+
+[renv.packages.labeling]
+package = 'labeling'
+version = '0.4.3'
+source = 'Repository'
+repository = 'CRAN'
+hash = ''
+type = 'Package'
+title = 'Axis Labeling'
+maintainer = 'Nuno Sempere <nuno.semperelh@gmail.com>'
+description = 'Functions which provide a range of axis labeling algorithms.'
+license = 'MIT + file LICENSE | Unlimited'
+imports = ['stats', 'graphics']
+needscompilation = 'no'
+author = 'Justin Talbot,'
 
 [renv.packages.later]
 package = 'later'
@@ -1600,6 +1747,29 @@ needscompilation = 'yes'
 author = 'Joe Cheng [aut], Timothy Mastny [aut], Richard Iannone [aut] (<https://orcid.org/0000-0003-3925-190X>), Barret Schloerke [aut] (<https://orcid.org/0000-0001-9986-114X>), Carson Sievert [aut, cre] (<https://orcid.org/0000-0002-4958-2844>), Christophe Dervieux [ctb] (<https://orcid.org/0000-0003-4474-2498>), RStudio [cph, fnd], Sass Open Source Foundation [ctb, cph] (LibSass library), Greter Marcel [ctb, cph] (LibSass library), Mifsud Michael [ctb, cph] (LibSass library), Hampton Catlin [ctb, cph] (LibSass library), Natalie Weizenbaum [ctb, cph] (LibSass library), Chris Eppstein [ctb, cph] (LibSass library), Adams Joseph [ctb, cph] (json.cpp), Trifunovic Nemanja [ctb, cph] (utf8.h)'
 'config/testthat/edition' = '3'
 systemrequirements = 'GNU make'
+
+[renv.packages.scales]
+package = 'scales'
+version = '1.4.0'
+source = 'Repository'
+repository = 'CRAN'
+depends = ['R (>= 4.1)']
+hash = ''
+title = 'Scale Functions for Visualization'
+'authors@r' = 'c( person("Hadley", "Wickham", , "hadley@posit.co", role = "aut"), person("Thomas Lin", "Pedersen", , "thomas.pedersen@posit.co", role = c("cre", "aut"), comment = c(ORCID = "0000-0002-5147-4711")), person("Dana", "Seidel", role = "aut"), person("Posit Software, PBC", role = c("cph", "fnd"), comment = c(ROR = "03wc8by49")) )'
+maintainer = 'Thomas Lin Pedersen <thomas.pedersen@posit.co>'
+description = 'Graphical scales map data to aesthetics, and provide methods for automatically determining breaks and labels for axes and legends.'
+url = 'https://scales.r-lib.org, https://github.com/r-lib/scales'
+bugreports = 'https://github.com/r-lib/scales/issues'
+license = 'MIT + file LICENSE'
+imports = ['cli', 'farver (>= 2.0.3)', 'glue', 'labeling', 'lifecycle', 'R6', 'RColorBrewer', 'rlang (>= 1.1.0)', 'viridisLite']
+suggests = ['bit64', 'covr', 'dichromat', 'ggplot2', 'hms (>= 0.5.0)', 'stringi', 'testthat (>= 3.0.0)']
+roxygennote = '7.3.2'
+encoding = 'UTF-8'
+needscompilation = 'no'
+author = 'Hadley Wickham [aut], Thomas Lin Pedersen [cre, aut] (<https://orcid.org/0000-0002-5147-4711>), Dana Seidel [aut], Posit Software, PBC [cph, fnd] (03wc8by49)'
+'config/testthat/edition' = '3'
+'config/needs/website' = 'tidyverse/tidytemplate'
 
 [renv.packages.sf]
 package = 'sf'
