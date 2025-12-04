@@ -77,7 +77,7 @@ server <- function(input, output, session) {
   })
   mod_ccam_select_server("ccam1", referentiel_actes_csv, rv, all_thematics_codes)
 
-  mod_filter_open_ccam_server("filter_open_ccam_1", rv, open_ccam_csv, swm_sf)
+  mod_filter_open_ccam_server("filter_open_ccam_1", rv, open_ccam_csv, swm_sf, dept_sf)
   mod_maps_server("maps_1", rv, dept_sf)
 }
 
