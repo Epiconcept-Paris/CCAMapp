@@ -81,7 +81,6 @@ mod_ccam_select_server <- function(
     ns <- session$ns
 
     observeEvent(input$search_type, {
-      print(input$search_type)
       if (input$search_type == "code_libelle") {
         shinyjs::runjs(sprintf(
           '$("%s").show()',

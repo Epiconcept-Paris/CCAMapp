@@ -32,8 +32,6 @@ mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, swm_sf) {
 
       local_rv$filtered_open_ccam <- open_ccam_csv[acte %in% ccam_codes]
 
-      all(local_rv$filtered_open_ccam$acte %in% ccam_codes)
-
       rv$stats_nationales_selected_ccam <- local_rv$filtered_open_ccam[,
         .(
           n_etablissements = uniqueN(finessgeo),

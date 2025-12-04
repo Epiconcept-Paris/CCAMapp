@@ -1,4 +1,30 @@
-function(input, output, session) {
+library(shiny)
+library(data.table)
+library(dplyr)
+library(DT)
+library(mapgl)
+library(sf)
+library(shinyjs)
+library(bslib)
+library(tidyr)
+
+ui <- page_sidebar(
+  useShinyjs(),
+  title = "Exploration actes CCAM",
+  sidebar = sidebar(
+    mod_ccam_select_ui("ccam1")
+  ),
+  tagList(
+    fluidRow(
+      h2("Actes CCAM sélectionnés"),
+      DTOutput("selected_ccam")
+    ),
+    fluidRow(mod_filter_open_ccam_ui("filter_open_ccam_1")),
+    fluidRow(mod_maps_ui("maps_1"))
+  )
+)
+
+server <- function(input, output, session) {
 
   referentiel_actes_csv_path <- file.path(
     here::here("external_data"),
@@ -54,3 +80,5 @@ function(input, output, session) {
   mod_filter_open_ccam_server("filter_open_ccam_1", rv, open_ccam_csv, swm_sf)
   mod_maps_server("maps_1", rv, dept_sf)
 }
+
+shinyApp(ui = ui, server = server)
