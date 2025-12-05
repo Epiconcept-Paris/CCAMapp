@@ -13,19 +13,22 @@ mod_filter_open_ccam_ui <- function(id) {
   tagList(
     fluidRow(
       style = "display: flex; align-items: stretch;",
-      column(4,
+      column(
+        4,
         style = "display: flex; flex-direction: column; padding: 0 10px;",
         uiOutput(ns("nombre_d_etablissements"))
       ),
-      column(4,
+      column(
+        4,
         style = "display: flex; flex-direction: column; padding: 0 10px;",
         uiOutput(ns("ratio_etablissements"))
       ),
-      column(4,
+      column(
+        4,
         style = "display: flex; flex-direction: column; padding: 0 10px;",
         uiOutput(ns("ratio_actes"))
       )
-    )    
+    )
   )
 }
 
@@ -34,7 +37,13 @@ mod_filter_open_ccam_ui <- function(id) {
 #' @noRd
 #' @import mapgl
 #' @importFrom dplyr inner_join select distinct
-mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, swm_sf, dept_sf) {
+mod_filter_open_ccam_server <- function(
+  id,
+  rv,
+  open_ccam_csv,
+  swm_sf,
+  dept_sf
+) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     local_rv <- reactiveValues(
@@ -82,12 +91,18 @@ mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, swm_sf, dept_sf) 
     output$ratio_etablissements <- renderUI({
       req(rv$swm_etablissements_with_selected_ccam)
       dept_france_metro <- dept_sf$code
-      n_actes_france_metro <- rv$stats_nationales_selected_ccam[ dep %in% dept_france_metro, sum(total_nb_actes) ]
-      n_actes_swm <- rv$stats_swm_selected_ccam[ dep %in% dept_france_metro, sum(total_nb_actes) ]
-        ratio <- n_actes_swm / n_actes_france_metro
-        if(is.nan(ratio) | is.infinite(ratio)) ratio <- 0
+      n_actes_france_metro <- rv$stats_nationales_selected_ccam[
+        dep %in% dept_france_metro,
+        sum(total_nb_actes)
+      ]
+      n_actes_swm <- rv$stats_swm_selected_ccam[
+        dep %in% dept_france_metro,
+        sum(total_nb_actes)
+      ]
+      ratio <- n_actes_swm / n_actes_france_metro
+      if (is.nan(ratio) | is.infinite(ratio)) ratio <- 0
       ratio_actes <- paste0(round(100 * ratio), "%")
-           div(
+      div(
         style = "display: flex; justify-content: center; margin: 0 auto; height: 100%;",
         card(
           class = "mb-3",
@@ -117,15 +132,21 @@ mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, swm_sf, dept_sf) 
       )
     })
 
-      output$ratio_actes <- renderUI({
+    output$ratio_actes <- renderUI({
       req(rv$swm_etablissements_with_selected_ccam)
       dept_france_metro <- dept_sf$code
-      n_etablissements_france_metro <- rv$stats_nationales_selected_ccam[ dep %in% dept_france_metro, sum(n_etablissements) ]
-      n_etablissements_swm <- rv$stats_swm_selected_ccam[ dep %in% dept_france_metro, sum(n_etablissements) ]
+      n_etablissements_france_metro <- rv$stats_nationales_selected_ccam[
+        dep %in% dept_france_metro,
+        sum(n_etablissements)
+      ]
+      n_etablissements_swm <- rv$stats_swm_selected_ccam[
+        dep %in% dept_france_metro,
+        sum(n_etablissements)
+      ]
       ratio <- n_etablissements_swm / n_etablissements_france_metro
-        if(is.nan(ratio) | is.infinite(ratio)) ratio <- 0
+      if (is.nan(ratio) | is.infinite(ratio)) ratio <- 0
       ratio_etablissements <- paste0(round(100 * ratio), "%")
-           div(
+      div(
         style = "display: flex; justify-content: center; margin: 0 auto; height: 100%;",
         card(
           class = "mb-3",

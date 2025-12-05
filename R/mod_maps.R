@@ -66,7 +66,7 @@ mod_maps_server <- function(id, rv, dept_sf) {
         )
     })
 
-     output$map_by_dept <- renderMaplibre({
+    output$map_by_dept <- renderMaplibre({
       req(rv$swm_etablissements_with_selected_ccam)
 
       dept_sf_with_count <- left_join(
@@ -147,7 +147,7 @@ mod_maps_server <- function(id, rv, dept_sf) {
         mutate(
           popup = paste0(
             "<b>Département: </b>",
-            code,            
+            code,
             "<br><b>Nombre d'actes SWM: </b>",
             total_nb_actes_swm_noNA,
             "<br><b>Nombre d'actes France: </b>",
@@ -163,10 +163,15 @@ mod_maps_server <- function(id, rv, dept_sf) {
           )
         )
 
-      dept_sf_with_count$ratio_actes_swm_nationales_percent <- dept_sf_with_count$ratio_actes_swm_nationales*100
-      dept_sf_with_count$ratio_actes_swm_nationales_percent[dept_sf_with_count$ratio_actes_swm_nationales_percent == 0] <- NA_real_
+      dept_sf_with_count$ratio_actes_swm_nationales_percent <- dept_sf_with_count$ratio_actes_swm_nationales *
+        100
+      dept_sf_with_count$ratio_actes_swm_nationales_percent[
+        dept_sf_with_count$ratio_actes_swm_nationales_percent == 0
+      ] <- NA_real_
 
-has_any_value <- any(!is.na(dept_sf_with_count$ratio_actes_swm_nationales_percent))
+      has_any_value <- any(
+        !is.na(dept_sf_with_count$ratio_actes_swm_nationales_percent)
+      )
       map <- maplibre(bounds = dept_sf_with_count) %>%
         add_fill_layer(
           id = "dept_sf_with_count",
@@ -175,27 +180,53 @@ has_any_value <- any(!is.na(dept_sf_with_count$ratio_actes_swm_nationales_percen
           fill_color = interpolate(
             column = "ratio_actes_swm_nationales_percent",
             values = c(
-              min(dept_sf_with_count$ratio_actes_swm_nationales_percent, na.rm = TRUE),
-              max(dept_sf_with_count$ratio_actes_swm_nationales_percent, na.rm = TRUE)
+              min(
+                dept_sf_with_count$ratio_actes_swm_nationales_percent,
+                na.rm = TRUE
+              ),
+              max(
+                dept_sf_with_count$ratio_actes_swm_nationales_percent,
+                na.rm = TRUE
+              )
             ),
             stops = c("yellow", "darkred"),
             na_color = "grey"
           ),
           fill_opacity = 0.7
         )
-        
-        if(has_any_value) {
-          map <- map %>%
-        add_legend(
-          legend_title = "Ratio actes SWM/France",
-          colors = c("yellow", "darkred"),
-          values = c(
-            paste0(format(min(dept_sf_with_count$ratio_actes_swm_nationales_percent, na.rm = TRUE), digits = 2, nsmall = 2), "%"),
-            paste0(format(max(dept_sf_with_count$ratio_actes_swm_nationales_percent, na.rm = TRUE), digits = 2, nsmall = 2), "%")
+
+      if (has_any_value) {
+        map <- map %>%
+          add_legend(
+            legend_title = "Ratio actes SWM/France",
+            colors = c("yellow", "darkred"),
+            values = c(
+              paste0(
+                format(
+                  min(
+                    dept_sf_with_count$ratio_actes_swm_nationales_percent,
+                    na.rm = TRUE
+                  ),
+                  digits = 2,
+                  nsmall = 2
+                ),
+                "%"
+              ),
+              paste0(
+                format(
+                  max(
+                    dept_sf_with_count$ratio_actes_swm_nationales_percent,
+                    na.rm = TRUE
+                  ),
+                  digits = 2,
+                  nsmall = 2
+                ),
+                "%"
+              )
+            )
           )
-        )
-        }
-        map
+      }
+      map
     })
   })
 }
