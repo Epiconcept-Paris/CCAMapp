@@ -29,6 +29,10 @@ mod_thematics_server <- function(id, rv, all_thematics_codes) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    local_rv <- reactiveValues(
+      selected_ccam_with_thematics = NULL
+    )
+
     output$selected_ccam <- renderDT({
       validate(
         need(isTruthy(rv$ccam), "Aucun acte CCAM sélectionné")
@@ -39,10 +43,7 @@ mod_thematics_server <- function(id, rv, all_thematics_codes) {
       )
     })
 
-    output$selected_ccam_with_categories <- renderPlot({
-      validate(
-        need(isTruthy(rv$ccam), "Aucun acte CCAM sélectionné")
-      )
+    observeEvent(rv$ccam, {
       ccam_with_thematics <- lapply(
         seq_len(length(all_thematics_codes)),
         function(x) {
@@ -89,12 +90,18 @@ mod_thematics_server <- function(id, rv, all_thematics_codes) {
         selected_ccam_with_thematics$thematique,
         levels = thematique_levels
       )
-      selected_ccam_with_thematics <- selected_ccam_with_thematics[order(
+      local_rv$selected_ccam_with_thematics <- selected_ccam_with_thematics[order(
         thematique
       )]
+    })
+
+    output$selected_ccam_with_categories <- renderPlot({
+      validate(
+        need(isTruthy(rv$ccam), "Aucun acte CCAM sélectionné")
+      )
 
       # Compter les actes par thématique
-      thematique_counts <- selected_ccam_with_thematics[, .N, by = thematique]
+      thematique_counts <- local_rv$selected_ccam_with_thematics[, .N, by = thematique]
       thematique_counts <- thematique_counts[order(-N)]
 
       ggplot(thematique_counts, aes(x = reorder(thematique, N), y = N)) +
