@@ -55,6 +55,24 @@ mod_filter_open_ccam_server <- function(
 
       local_rv$filtered_open_ccam <- open_ccam_csv[acte %in% ccam_codes]
 
+      # Number of acts by act code, filtered by the selected CCAMs
+      rv$stats_nationales_selected_ccam_by_act_code <- local_rv$filtered_open_ccam[,
+        .(
+          total_nb_actes = sum(nb_actes, na.rm = TRUE)
+        ),
+        by = acte
+      ]
+
+      # Number of acts by act code, filtered by the selected CCAMs, and the SWM establishments
+      rv$stats_swm_selected_ccam_by_act_code <- local_rv$filtered_open_ccam[
+        finessgeo %in% swm_sf$finess_geographique,
+        .(
+          total_nb_actes = sum(nb_actes, na.rm = TRUE)
+        ),
+        by = acte
+      ]
+
+      # Number of establishments and number of acts by department, filtered by the selected CCAMs
       rv$stats_nationales_selected_ccam <- local_rv$filtered_open_ccam[,
         .(
           n_etablissements = uniqueN(finessgeo),
@@ -63,6 +81,7 @@ mod_filter_open_ccam_server <- function(
         by = dep
       ]
 
+      # Number of establishments and number of acts by department, filtered by the selected CCAMs and the SWM establishments
       rv$stats_swm_selected_ccam <- local_rv$filtered_open_ccam[
         finessgeo %in% swm_sf$finess_geographique,
         .(
