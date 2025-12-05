@@ -2,7 +2,7 @@
 '$schema' = 'https://cdn.posit.co/publisher/schemas/posit-publishing-record-schema-v3.json'
 server_type = 'connect_cloud'
 server_url = 'https://connect.posit.cloud'
-client_version = '1.27.2'
+client_version = '1.27.3'
 created_at = ''
 dismissed_at = ''
 type = 'r-shiny'
@@ -11,14 +11,17 @@ id = '019ae850-d049-ec39-3370-0def4e8c76ad'
 dashboard_url = 'https://connect.posit.cloud/yohannepi/content/019ae850-d049-ec39-3370-0def4e8c76ad'
 direct_url = 'https://019ae850-d049-ec39-3370-0def4e8c76ad.share.connect.posit.cloud'
 logs_url = 'https://connect.posit.cloud/yohannepi/content/019ae850-d049-ec39-3370-0def4e8c76ad/history'
-deployed_at = '2025-12-04T17:10:57+01:00'
-bundle_id = '019aea21-6cd3-ad5b-9a10-7801c827b460'
+deployed_at = '2025-12-05T11:58:23+01:00'
+bundle_id = '019aee29-9652-52e3-fa17-246696dd8210'
 files = [
   '.posit/publish/CCAMapp-VNLE.toml',
   '.posit/publish/deployments/deployment-INQT.toml',
   'R/mod_ccam_select.R',
   'R/mod_filter_open_ccam.R',
   'R/mod_maps.R',
+  'R/mod_thematics.R',
+  'R/retrieve_ccam_thematics.R',
+  'R/thematics_plot.R',
   'app.R',
   'data/swm_cleaned_by_finess_sf.rds',
   'external_data/ccam_dbf/R_ACTE.dbf',

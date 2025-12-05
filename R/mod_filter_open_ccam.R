@@ -51,9 +51,12 @@ mod_filter_open_ccam_server <- function(
     )
     observeEvent(rv$ccam, {
       req(rv$ccam)
-      ccam_codes <- paste0(rv$ccam, "0")
 
-      local_rv$filtered_open_ccam <- open_ccam_csv[acte %in% ccam_codes]
+      # In Open CCAM, acts are in 8 characters, while it is on 7 on other sources ...
+      local_rv$filtered_open_ccam <- open_ccam_csv[
+        substr(acte, 1, 7) %in% rv$ccam
+      ]
+      local_rv$filtered_open_ccam[, acte := substr(acte, 1, 7)]
 
       # Number of acts by act code, filtered by the selected CCAMs
       rv$stats_nationales_selected_ccam_by_act_code <- local_rv$filtered_open_ccam[,
