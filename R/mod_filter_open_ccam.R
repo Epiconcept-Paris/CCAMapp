@@ -84,7 +84,9 @@ mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, swm_sf, dept_sf) 
       dept_france_metro <- dept_sf$code
       n_actes_france_metro <- rv$stats_nationales_selected_ccam[ dep %in% dept_france_metro, sum(total_nb_actes) ]
       n_actes_swm <- rv$stats_swm_selected_ccam[ dep %in% dept_france_metro, sum(total_nb_actes) ]
-      ratio_actes <- paste0(round(100 * n_actes_swm / n_actes_france_metro), "%")
+        ratio <- n_actes_swm / n_actes_france_metro
+        if(is.nan(ratio) | is.infinite(ratio)) ratio <- 0
+      ratio_actes <- paste0(round(100 * ratio), "%")
            div(
         style = "display: flex; justify-content: center; margin: 0 auto; height: 100%;",
         card(
@@ -120,7 +122,9 @@ mod_filter_open_ccam_server <- function(id, rv, open_ccam_csv, swm_sf, dept_sf) 
       dept_france_metro <- dept_sf$code
       n_etablissements_france_metro <- rv$stats_nationales_selected_ccam[ dep %in% dept_france_metro, sum(n_etablissements) ]
       n_etablissements_swm <- rv$stats_swm_selected_ccam[ dep %in% dept_france_metro, sum(n_etablissements) ]
-      ratio_etablissements <- paste0(round(100 * n_etablissements_swm / n_etablissements_france_metro), "%")
+      ratio <- n_etablissements_swm / n_etablissements_france_metro
+        if(is.nan(ratio) | is.infinite(ratio)) ratio <- 0
+      ratio_etablissements <- paste0(round(100 * ratio), "%")
            div(
         style = "display: flex; justify-content: center; margin: 0 auto; height: 100%;",
         card(

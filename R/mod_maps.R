@@ -12,7 +12,7 @@ mod_maps_ui <- function(id) {
   tagList(
     fluidRow(
       div(id = ns("map_container"), style = "display: none;"),
-      column(6, maplibreOutput(ns("map"))),
+      column(6, maplibreOutput(ns("map_etablissements_location"))),
       column(6, maplibreOutput(ns("map_by_dept")))
     )
   )
@@ -44,7 +44,7 @@ mod_maps_server <- function(id, rv, dept_sf) {
       ignoreInit = TRUE
     )
 
-    output$map <- renderMaplibre({
+    output$map_etablissements_location <- renderMaplibre({
       req(rv$swm_etablissements_with_selected_ccam)
 
       maplibre(bounds = dept_sf) %>%
@@ -66,7 +66,7 @@ mod_maps_server <- function(id, rv, dept_sf) {
         )
     })
 
-    output$map_by_dept <- renderMaplibre({
+     output$map_by_dept <- renderMaplibre({
       req(rv$swm_etablissements_with_selected_ccam)
 
       dept_sf_with_count <- left_join(
@@ -166,7 +166,8 @@ mod_maps_server <- function(id, rv, dept_sf) {
       dept_sf_with_count$ratio_actes_swm_nationales_percent <- dept_sf_with_count$ratio_actes_swm_nationales*100
       dept_sf_with_count$ratio_actes_swm_nationales_percent[dept_sf_with_count$ratio_actes_swm_nationales_percent == 0] <- NA_real_
 
-      maplibre(bounds = dept_sf_with_count) %>%
+has_any_value <- any(!is.na(dept_sf_with_count$ratio_actes_swm_nationales_percent))
+      map <- maplibre(bounds = dept_sf_with_count) %>%
         add_fill_layer(
           id = "dept_sf_with_count",
           source = dept_sf_with_count,
@@ -181,7 +182,10 @@ mod_maps_server <- function(id, rv, dept_sf) {
             na_color = "grey"
           ),
           fill_opacity = 0.7
-        ) %>%
+        )
+        
+        if(has_any_value) {
+          map <- map %>%
         add_legend(
           legend_title = "Ratio actes SWM/France",
           colors = c("yellow", "darkred"),
@@ -190,6 +194,8 @@ mod_maps_server <- function(id, rv, dept_sf) {
             paste0(format(max(dept_sf_with_count$ratio_actes_swm_nationales_percent, na.rm = TRUE), digits = 2, nsmall = 2), "%")
           )
         )
+        }
+        map
     })
   })
 }
